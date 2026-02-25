@@ -1,0 +1,203 @@
+<!-- 【利用者一覧】 -->
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利用者一覧</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+<body>
+<div th:replace="~{layout-admin :: header}"></div>
+
+<main id="admin-main">
+    <h1 class="page-title">
+        <span class="material-symbols-outlined scale-bigger text-gray mr-2">account_circle</span>
+        利用者一覧
+        <span class="page-title-count" th:text="'(' + ${users.size()} + '件)'">(0件)</span>
+    </h1>
+
+    <div class="main-content">
+        <div class="flex justify-between mt-2"> <!-- テーブルの上のメニュー部分 -->
+            <div class="flex gap-1"> <!-- メニュー左部分(並び替え) -->
+                <form method="GET" th:action="@{/admin/account/list}">
+                    <input type="hidden" name="keyword" th:value="${form.keyword}">
+                    <th:block th:each="s : ${form.status}">
+                        <input type="hidden" name="status" th:value="${s}">
+                    </th:block>
+                    <th:block th:each="g : ${form.gender}">
+                        <input type="hidden" name="gender" th:value="${g}">
+                    </th:block>
+                    <th:block th:each="a : ${form.ageGroup}">
+                        <input type="hidden" name="ageGroup" th:value="${a}">
+                    </th:block>
+                    <th:block th:each="addr : ${form.address}">
+                        <input type="hidden" name="address" th:value="${addr}">
+                    </th:block>
+                    <select name="sort" class="select">
+                        <option value="created_desc" th:selected="${form.sort == 'created_desc'}">登録日時(新→旧)</option>
+                        <option value="created_asc"  th:selected="${form.sort == 'created_asc'}">登録日時(旧→新)</option>
+                        <option value="loginId_asc" th:selected="${form.sort == 'loginId_asc'}">ログインID(A→Z)</option>
+                        <option value="loginId_desc" th:selected="${form.sort == 'loginId_desc'}">ログインID(Z→A)</option>
+                        <option value="birthYear_desc" th:selected="${form.sort == 'birthYear_desc'}">年齢(若→老)</option>
+                        <option value="birthYear_asc" th:selected="${form.sort == 'birthYear_asc'}">年齢(老→若)</option>
+                        <option value="reviewCount_desc" th:selected="${form.sort == 'reviewCount_desc'}">書評数(多→少)</option>
+                        <option value="reviewCount_asc" th:selected="${form.sort == 'reviewCount_asc'}">書評数(少→多)</option>
+                    </select>
+                </form>
+                順
+            </div>
+            <div class="flex gap-1"> <!-- メニュー右部分(絞り込み・検索) -->
+                <div class="filter-btn-container">
+                    <button type="button" class="btn filter-btn-wrap" id="filter-btn" data-modal-target="filter-option-modal">
+                        絞り込みオプション
+                    </button>
+                    <a th:href="@{/admin/account/list(keyword=${form.keyword}, sort=${form.sort})}"
+                        class="clear-filter-icon material-symbols-outlined"
+                        onclick="event.stopPropagation();">
+                        <span class="material-symbols-outlined">close</span>
+                    </a>
+                </div>
+                <form method="GET" th:action="@{/admin/account/list}" class="flex gap-1">
+                    <input type="hidden" name="sort" th:value="${form.sort}">
+                    <th:block th:each="s : ${form.status}">
+                        <input type="hidden" name="status" th:value="${s}">
+                    </th:block>
+                    <th:block th:each="g : ${form.gender}">
+                        <input type="hidden" name="gender" th:value="${g}">
+                    </th:block>
+                    <th:block th:each="a : ${form.ageGroup}">
+                        <input type="hidden" name="ageGroup" th:value="${a}">
+                    </th:block>
+                    <th:block th:each="addr : ${form.address}">
+                        <input type="hidden" name="address" th:value="${addr}">
+                    </th:block>
+                    <input type="search" name="keyword" class="input-text" placeholder="ログインIDまたはニックネームで検索" th:value="${form.keyword}">
+                    <button type="submit" class="btn"><span class="material-symbols-outlined scale-bigger mt-2">search</span></button>
+                </form>
+            </div>
+        </div>
+
+        <table class="list-table mt-4">
+            <tr>
+                <th class="table-border-r">ステータス</th>
+                <th>ログインID</th>
+                <th class="table-border-r">ニックネーム</th>
+                <th>性別</th>
+                <th>生年(年齢)</th>
+                <th>居住地</th>
+                <th>登録日時</th>
+                <th>書評数</th>
+                <th></th>
+            </tr>
+            <tr th:if="${#lists.isEmpty(users)}">
+                <td colspan="9" class="text-center">
+                    該当する利用者はいませんでした
+                </td>
+            </tr>
+            <tr class="table-content-tr" th:each="user : ${users}">
+                <td class="table-border-r text-center">
+                    <span th:if="${user.status.label == '有効'}" class="status-green">
+                        <span class="material-symbols-outlined">check_circle</span>有効
+                    </span>
+                    <span th:if="${user.status.label == '停止'}" class="status-red">
+                        <span class="material-symbols-outlined">pause_circle</span>停止
+                    </span>
+                    <span th:if="${user.status.label == '無効'}" class="status-gray">
+                        <span class="material-symbols-outlined">block</span>無効
+                    </span>
+                </td>
+                <td th:text="${user.loginId}">-----</td>
+                <td th:text="${user.nickname}" class="table-border-r">-----</td>
+                <td th:text="${user.gender.label}" class="text-center">-----</td>
+                <td th:text="${user.birthYear} + '年 (' + ${user.age} + '歳)'" class="text-center">0000年 (0歳)</td>
+                <td th:text="${user.address}" class="text-center">-----県 -----市</td>
+                <td th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm')}" class="text-center">0000/00/00 00:00</td>
+                <td th:text="${user.reviewCount}" class="text-center">0</td>
+                <td class="text-center">
+                    <a href="account_view.html" th:href="@{/admin/account/view(loginId=${user.loginId})}" class="table-row-link">
+                        <span class="material-symbols-outlined">keyboard_double_arrow_right</span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <div class="pagination" id="pagination"></div>
+    </div>
+</main>
+
+<div id="filter-option-modal" class="modal">
+    <div>
+        <div class="modal-content">
+            <h2 class="page-title-sub">絞り込みオプション</h2>
+            <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+            <form method="GET" th:action="@{/admin/account/list}">
+                <input type="hidden" name="keyword" th:value="${form.keyword}">
+                <input type="hidden" name="sort" th:value="${form.sort}">
+
+                <ul class="modal-option-wrap mt-4 ml-4">
+                    <li>
+                        <label><input type="checkbox" class="modal-checkbox-parent">ステータス</label>
+                        <ul class="modal-checkbox-child grid-5">
+                            <li><label><input type="checkbox" name="status" value="有効" th:checked="${form.status != null and form.status.contains('有効')}">有効</label></li>
+                            <li><label><input type="checkbox" name="status" value="停止" th:checked="${form.status != null and form.status.contains('停止')}">停止</label></li>
+                            <li><label><input type="checkbox" name="status" value="無効" th:checked="${form.status != null and form.status.contains('無効')}">無効</label></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="modal-checkbox-parent">性別</label>
+                        <ul class="modal-checkbox-child grid-5">
+                            <li><label><input type="checkbox" name="gender" value="男性" th:checked="${form.gender != null and form.gender.contains('男性')}">男性</label></li>
+                            <li><label><input type="checkbox" name="gender" value="女性" th:checked="${form.gender != null and form.gender.contains('女性')}">女性</label></li>
+                            <li><label><input type="checkbox" name="gender" value="選択しない" th:checked="${form.gender != null and form.gender.contains('選択しない')}">選択しない</label></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="modal-checkbox-parent">年代</label>
+                        <ul class="modal-checkbox-child grid-5">
+                            <li><label><input type="checkbox" name="ageGroup" value="9歳以下" th:checked="${form.ageGroup != null and form.ageGroup.contains('9歳以下')}">~9歳</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="10代" th:checked="${form.ageGroup != null and form.ageGroup.contains('10代')}">10代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="20代" th:checked="${form.ageGroup != null and form.ageGroup.contains('20代')}">20代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="30代" th:checked="${form.ageGroup != null and form.ageGroup.contains('30代')}">30代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="40代" th:checked="${form.ageGroup != null and form.ageGroup.contains('40代')}">40代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="50代" th:checked="${form.ageGroup != null and form.ageGroup.contains('50代')}">50代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="60代" th:checked="${form.ageGroup != null and form.ageGroup.contains('60代')}">60代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="70代" th:checked="${form.ageGroup != null and form.ageGroup.contains('70代')}">70代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="80代" th:checked="${form.ageGroup != null and form.ageGroup.contains('80代')}">80代</label></li>
+                            <li><label><input type="checkbox" name="ageGroup" value="90歳以上" th:checked="${form.ageGroup != null and form.ageGroup.contains('90歳以上')}">90歳~</label></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="modal-checkbox-parent">居住地</label>
+                        <ul class="modal-checkbox-child">
+                            <li><label><input type="checkbox" name="address" value="岩手県" th:checked="${form.address != null and form.address.contains('岩手県')}">岩手県</label></li>
+                            <li>
+                                <label><input type="checkbox" class="modal-checkbox-parent">東北(岩手県以外)</label>
+                                <ul class="modal-checkbox-child grid-5">
+                                    <li><label><input type="checkbox" name="address" value="青森県" th:checked="${form.address != null and form.address.contains('青森県')}">青森県</label></li>
+                                    <li><label><input type="checkbox" name="address" value="宮城県" th:checked="${form.address != null and form.address.contains('宮城県')}">宮城県</label></li>
+                                    <li><label><input type="checkbox" name="address" value="秋田県" th:checked="${form.address != null and form.address.contains('秋田県')}">秋田県</label></li>
+                                    <li><label><input type="checkbox" name="address" value="山形県" th:checked="${form.address != null and form.address.contains('山形県')}">山形県</label></li>
+                                    <li><label><input type="checkbox" name="address" value="福島県" th:checked="${form.address != null and form.address.contains('福島県')}">福島県</label></li>
+                                </ul>
+                            </li>
+                            <li><label><input type="checkbox" name="address" value="東北以外" th:checked="${form.address != null and form.address.contains('東北以外')}">東北以外</label></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="btn-wrap mt-8">
+                    <button id="clear-all-checkbox" class="btn btn-danger">リセット</button>
+                    <button type="submit" class="btn">絞り込む</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../../static/js/admin/admin-general.js" th:src="@{/js/admin/admin-general.js}"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評の編集</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+
+    <link rel="stylesheet" th:href="@{/css/books/book-detail-edit.css}"
+        href="../../static/css/books/book-detail-edit.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+
+<body>
+    <div th:replace="~{layout :: header}"></div>
+    <div class="container">
+        <main>
+
+            <div class="form-container">
+
+                <div class="breadcrumb-box">
+                    <div class="breadcrumb">ホーム</div>
+                    <div class="breadcrumb-middle">></div>
+                    <div class="breadcrumb">マイページ</div>
+                    <div class="breadcrumb-middle">></div>
+                    <div class="breadcrumb">書評の編集</div>
+                </div>
+
+                <div class="current-step-title">
+                    <h2>書評の編集</h2>
+                </div>
+
+                <div class="forbidden-box">
+                    <div class="info-box-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>投稿時の禁止事項</h3>
+                    </div>
+                    <div style="display: block;">
+                        <div th:if="${project.enableVisibleBookTitle}" class="forbidden-review">
+                            <img th:src="@{/img/book.png}" src="../../static/img/book.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>本のタイトルや著者名を書く</h4>
+                                <p>書名や著者名は書評に記入しないでください。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/not_people.png}" src="../../static/img/not_people.png">
+                            <div class="forbidden-text">
+                                <h4>他の人を傷つける言葉を書く</h4>
+                                <p>誹謗中傷や攻撃的な言葉遣いは避け、敬意をもって
+                                    感想を共有しましょう。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/face.png}" src="../../static/img/face.png">
+                            <div class="forbidden-text">
+                                <h4>不適切・過激な表現を使う</h4>
+                                <p>公序良俗に反する言葉や、暴力的・性的な内容は
+                                    投稿できません。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/people.png}" src="../../static/img/people.png">
+                            <div class="forbidden-text">
+                                <h4>個人情報（名前・連絡先など）を書く</h4>
+                                <p>プライバシー保護のため、ご自身や他者の個人
+                                    情報を記載しないでください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form id="signup-form" th:action="@{/review/edit/{id}(id=${reviewId})}" method="post"
+                    th:object="${reviewForm}">
+                    <div class="form-group bio-wrapper">
+                        <label for="account-id">書評タイトル<span>（タイトルは20文字以内）</span></label>
+                        <input th:field="*{reviewTitle}" type="text" id="account-id" name="account-id">
+                        <div class="char-count"><span>0</span>/20文字</div>
+                    </div>
+                    <div class="form-group bio-wrapper bio-bottom">
+                        <label for="bio">書評内容<span>（内容は300文字～500文字内）</span></label>
+                        <textarea th:field="*{reviewContent}" id="bio" name="bio" rows="6"></textarea>
+                        <div class="char-count"><span id="current-count">0</span>/500文字</div>
+                    </div>
+                    <input type="hidden" name="" th:field="*{projectId}">
+                    <input type="hidden" name="" th:field="*{bookTitle}">
+                    <input type="hidden" name="" th:field="*{author}">
+                    <input type="hidden" name="" th:field="*{publisher}">
+                    <input type="hidden" name="" th:field="*{isbn}">
+                    <div class="btn-review-box">
+                        <div class="btn-shadow">
+                            <a href="isbn-search.html" class="btn-review btn-register  btn-color-left">戻る</a>
+                        </div>
+                        <div class="btn-shadow">
+                            <button type="submit" class="btn-review btn-register btn-color-right">編集を確定する</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+        <!-- ヘッダーモーダル -->
+        <div class="overlay-menu" id="overlayMenu">
+            <div class="close-btn" id="menuClose">×</div>
+            <img src="../img/zoutohana-white-color.png" class="" style="width: 5rem;" alt="">
+            <ul class="menu-list">
+                <li class="menu-item">お知らせ</li>
+
+                <li class="menu-item">企画一覧</li>
+
+                <li class="menu-item">象と花プロジェクト</li>
+
+                <li class="menu-item">お問い合わせ</li>
+
+                <li class="menu-item">ログイン</li>
+            </ul>
+            <div class="imgs">
+                <img src="../img/instagram-white.png" class="imgs-icon" alt="">
+                <img src="../img/facebook-white.png" class="imgs-width" alt="">
+                <img src="../img/x-white.png" class="imgs-width" alt="">
+            </div>
+        </div>
+
+        <!-- メールモーダル -->
+        <div class="mail-modal-overlay" id="mailModal">
+            <div class="mail-modal">
+                <div class="mail-modal-header">
+                    <span>メール</span>
+                    <button class="mail-close" id="mailClose">×</button>
+                </div>
+
+                <ul class="mail-list">
+                    <li>
+                        <span class="mail-date">2025.01.01</span>
+                        <div class="mail-flex">
+                            <p>あなたの書評が選ばれました。</p>
+                            <p class="mail-open-detail">></p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="mail-date">2025.01.01</span>
+                        <div class="mail-flex">
+                            <p>新たに寄贈しました</p>
+                            <p class="mail-open-detail">></p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="mail-date">2025.01.01</span>
+                        <div class="mail-flex">
+                            <p>「文庫X 1.0」終了のお知らせ</p>
+                            <p class="mail-open-detail">></p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="mail-date">2025.01.01</span>
+                        <div class="mail-flex">
+                            <p>サイトのメンテナンスについて</p>
+                            <p class="mail-open-detail">></p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="page-nav">
+                    <button class="nav-circle prev">＜</button>
+                    <button class="nav-circle next">＞</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- メール詳細モーダル -->
+        <div class="mail-modal-overlay" id="mailDetailModal">
+            <div class="mail-modal">
+                <div class="mail-modal-header">
+                    <span>メール</span>
+                    <button class="mail-close" id="mailDetailClose">×</button>
+                </div>
+                <article class="mail-detail-box">
+                    <h1 class="main-title">【書評コンテスト】結果発表！</h1>
+                    <p class="date">2025.01.01</p>
+                    <div class="current-sub-title">
+                        <h2 class="sub-title">第1次選考の結果を発表しました！</h2>
+                    </div>
+                    <p class="content-text">
+                        書評コンテストにたくさんのご応募をいただき、誠にありがとうございました。<br>
+                        どの作品にも作者の想いや読書への情熱が込められており、選考委員一同、非常に熱心に審査を行いました。
+                    </p>
+
+                    <p class="content-text">
+                        第1次選考では、以下の点を中心に審査を実施しました。
+                    </p>
+                </article>
+                <div class="page-nav-box">
+                    <button class="nav-circle-box prev">＜</button>
+
+                    <a href="#" class="nav-center">
+                        一覧に戻る
+                    </a>
+
+                    <button class="nav-circle-box next">＞</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:replace="~{layout :: footer}"></div>
+
+    <script>
+        // ▼▼▼ 要素を取得 ▼▼▼
+        const menuOpen = document.getElementById('menuOpen');   // ハンバーガーメニューのアイコン
+        const menuClose = document.getElementById('menuClose'); // ハンバーガーメニューの閉じるボタン
+        const overlayMenu = document.getElementById('overlayMenu'); // ハンバーガーメニュー本体
+
+        const gearButton = document.querySelector('.settings-icon'); // 歯車アイコン
+        const settingsModal = document.getElementById('settingsModal'); // 設定モーダル本体
+
+        // ▼▼▼ ハンバーガーメニューの動作（既存のまま） ▼▼▼
+        menuOpen.addEventListener('click', () => {
+            overlayMenu.classList.add('active');
+        });
+
+        menuClose.addEventListener('click', () => {
+            overlayMenu.classList.remove('active');
+        });
+
+        // 1. 歯車を押したときの動作
+        gearButton.addEventListener('click', (e) => {
+            // add ではなく toggle にすることで、「開く/閉じる」を繰り返せます
+            settingsModal.classList.toggle('active');
+        });
+
+        // 2. モーダルの背景（黒い部分）を押したときの動作
+        settingsModal.addEventListener('click', (e) => {
+            // クリックした場所が「モーダル本体(settingsModal)」そのものだった場合のみ閉じる
+            // （中の白い箱をクリックしても閉じないようにする判定）
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        });
+    </script>
+    <script>
+        // メールモーダル
+        const mailIcon = document.querySelector('.mail-icon');
+        const mailModal = document.getElementById('mailModal');
+        const mailClose = document.getElementById('mailClose');
+
+        const detailButtons = document.querySelectorAll('.mail-open-detail');
+        const mailDetailModal = document.getElementById('mailDetailModal');
+        const mailDetailClose = document.getElementById('mailDetailClose');
+
+        mailIcon.addEventListener('click', () => {
+            mailModal.classList.add('active');
+        });
+
+        mailClose.addEventListener('click', () => {
+            mailModal.classList.remove('active');
+        });
+
+        // 背景タップで閉じる
+        mailModal.addEventListener('click', (e) => {
+            if (e.target === mailModal) {
+                mailModal.classList.remove('active');
+            }
+        });
+
+        // ＞ を押したら詳細モーダル
+        detailButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                mailModal.classList.remove('active');
+
+                mailDetailModal.classList.add('active');
+            });
+        });
+
+        // × で閉じる
+        mailDetailClose.addEventListener('click', () => {
+            mailDetailModal.classList.remove('active');
+            mailModal.classList.add('active');
+        });
+
+        // 背景クリックで閉じる
+        mailDetailModal.addEventListener('click', (e) => {
+            if (e.target === mailDetailModal) {
+                mailDetailModal.classList.remove('active');
+            }
+        });
+    </script>
+
+    <script>
+        const openDeleteModal = document.getElementById('openDeleteModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteCancel = document.getElementById('deleteCancel');
+
+        // 削除モーダルを開く
+        openDeleteModal.addEventListener('click', (e) => {
+            e.preventDefault();
+            deleteModal.classList.add('active');
+            settingsModal.classList.remove('active'); // 設定モーダルを閉じる
+        });
+
+        // 「もどる」ボタン
+        deleteCancel.addEventListener('click', () => {
+            deleteModal.classList.remove('active');
+        });
+
+        // 背景クリックで閉じる
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove('active');
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. 書評内容文字数カウント
+            const bio = document.getElementById('bio');
+            const currentCount = document.getElementById('current-count');
+            const maxLength = 500;
+            const minLength = 300;
+
+            if (bio && currentCount) {
+                bio.addEventListener('input', function () {
+                    const length = bio.value.length;
+                    currentCount.textContent = length;
+                    if (length > maxLength || length < minLength) {
+                        currentCount.style.color = 'red'; // 範囲外
+                    } else {
+                        currentCount.style.color = '#888'; // 範囲内
+                    }
+                });
+            }
+            // ------------------------
+            // ② 書評タイトル（1〜20文字）カウント
+            // ------------------------
+            const titleInput = document.getElementById('account-id');
+            const titleCountSpan = document.querySelector('.form-group .char-count span'); // 最初のchar-count
+
+            if (titleInput && titleCountSpan) {
+                titleInput.addEventListener('input', function () {
+                    const len = titleInput.value.length;
+
+                    titleCountSpan.textContent = len; // カウント更新
+
+                    // 1〜20文字範囲内なら灰色、範囲外なら赤
+                    if (len > 20 || len < 1) {
+                        titleCountSpan.style.color = 'red';
+                    } else {
+                        titleCountSpan.style.color = '#888';
+                    }
+                });
+            }
+
+
+            // 3. 「確認へ」ボタンの取得とクリックイベントの設定
+            // 修正ポイント: ボタンのクラスや属性から正しく要素を取得します
+            // HTMLを見ると <a href="Book-reivew.html" class="btn-review ...">確認へ</a> となっています
+            // 特定のIDがないため、querySelectorでクラス指定するか、HTMLにIDを追加するのが確実です。
+            // ここでは、HTMLを変更せずに済むよう、href属性で特定します。
+            const confirmBtn = document.querySelector('a[href="Book-reivew.html"]');
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', function (e) {
+                    e.preventDefault(); // 画面遷移を一旦停止
+
+                    // (A) 書籍情報（前のページ isbn-search.html で保存されたデータ）を取得
+                    const bookDataJson = sessionStorage.getItem('bookData');
+                    const bookData = bookDataJson ? JSON.parse(bookDataJson) : null;
+
+                    // (B) 書評フォームの各値を取得
+                    const reviewTitle = document.getElementById('account-id').value; // タイトル入力欄
+                    const reviewContent = document.getElementById('bio').value;      // 書評内容
+
+                    // (C) バリデーション（入力チェック）
+                    if (!reviewTitle.trim()) {
+                        alert('書評タイトルを入力してください。');
+                        return;
+                    }
+                    if (reviewTitle.length < 1 || reviewTitle.length > 20) {
+                        alert(`書評タイトルは1〜20文字で入力してください。（現在: ${reviewTitle.length}文字）`);
+                        return;
+                    }
+
+                    const length = reviewContent.length;
+                    if (length < 300 || length > 500) {
+                        alert(`書評内容は300文字以上500文字以内で入力してください。（現在: ${length}文字）`);
+                        return;
+                    }
+
+                    // (D) 保存するデータをまとめる
+                    const confirmationData = {
+                        // 書籍情報 (bookDataがない場合はデフォルト値)
+                        bookTitle: bookData ? bookData.title : '情報なし',
+                        bookAuthor: bookData ? bookData.author : '情報なし',
+                        bookPublisher: bookData ? bookData.publisher : '情報なし',
+                        bookCover: bookData ? bookData.coverUrl : 'https://via.placeholder.com/100x150?text=No+Image',
+
+                        // 書評情報
+                        reviewTitle: reviewTitle,
+                        reviewContent: reviewContent
+                    };
+
+                    // (E) sessionStorageに保存
+                    sessionStorage.setItem('reviewData', JSON.stringify(confirmationData));
+
+                    // (F) 確認画面へ遷移
+                    window.location.href = this.href;
+                });
+            } else {
+                console.error("「確認へ」ボタンが見つかりません。HTMLのリンク先やクラスを確認してください。");
+            }
+            // 1. sessionStorageから保存された書評データを取得
+            const reviewDataJson = sessionStorage.getItem('reviewData');
+
+            if (reviewDataJson) {
+                // データがある場合
+                const reviewData = JSON.parse(reviewDataJson);
+
+                // 【修正点】HTMLのIDに合わせて取得先を変更しました
+                const titleInput = document.getElementById('account-id'); // review-title ではなく account-id
+                const contentInput = document.getElementById('bio');      // review-content ではなく bio
+
+                if (titleInput) {
+                    titleInput.value = reviewData.reviewTitle || '';
+                    // 値を入れた後に「入力イベント」を強制的に起こして、文字数カウントを更新させる
+                    titleInput.dispatchEvent(new Event('input'));
+                }
+
+                if (contentInput) {
+                    contentInput.value = reviewData.reviewContent || '';
+                    // 値を入れた後に「入力イベント」を強制的に起こして、文字数カウントを更新させる
+                    contentInput.dispatchEvent(new Event('input'));
+                }
+            }
+        });
+
+    </script>
+    <script src="../js/mypage.js"></script>
+</body>
+
+</html>

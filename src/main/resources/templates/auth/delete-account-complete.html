@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退会手続き</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+
+    <link th:href="@{/css/main.css}" rel="stylesheet" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/auth/delete-account-complete.css}"
+        href="../../static/css/auth/delete-account-complete.css">
+</head>
+
+<body>
+
+    <div th:replace="~{layout :: header}"></div>
+
+    <div class="container">
+        <main>
+            <div class="form-container">
+                <div class="check-img-div">
+                    <div class="check-outer">
+                        <div class="check-inner">
+                            <svg width="40" height="30" viewBox="0 0 52 40" fill="none">
+                                <path d="M5 22L20 35L47 5" stroke="white" stroke-width="6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <!-- テキスト -->
+                <h2 class="complete-title">退会が完了しました</h2>
+
+                <div class="complete-line"></div>
+
+                <p class="complete-text">
+                    アカウントの削除処理が正常に<br>
+                    完了いたしました。
+                </p>
+
+                <p class="complete-text">
+                    またのご利用、お待ちしております。
+                </p>
+
+                <!-- ボタン -->
+                <a th:href="@{/}" href="/" class="complete-btn">
+                    ファンサイトTOPへ
+                </a>
+            </div>
+        </main>
+
+
+        <!-- ヘッダーモーダル -->
+        <div class="overlay-menu" id="overlayMenu">
+            <div class="close-btn" id="menuClose">×</div>
+
+            <img src="../../static/img/象と花-white-color.png" class="" style="width: 5rem;" alt="">
+
+            <ul class="menu-list">
+                <li class="menu-item">お知らせ</li>
+
+                <li class="menu-item">企画一覧</li>
+
+                <li class="menu-item">象と花プロジェクト</li>
+
+                <li class="menu-item">お問い合わせ</li>
+
+                <li class="menu-item">ログイン</li>
+            </ul>
+            <div class="imgs">
+                <img src="../../static/img/instagram-white.png" class="imgs-icon" alt="">
+                <img src="../../static/img/facebook-white.png" class="imgs-width" alt="">
+                <img src="../../static/img/x-white.png" class="imgs-width" alt="">
+            </div>
+        </div>
+        <script>
+            // ▼▼▼ 要素を取得 ▼▼▼
+            const menuOpen = document.getElementById('menuOpen');   // ハンバーガーメニューのアイコン
+            const menuClose = document.getElementById('menuClose'); // ハンバーガーメニューの閉じるボタン
+            const overlayMenu = document.getElementById('overlayMenu'); // ハンバーガーメニュー本体
+
+            // ▼▼▼ ハンバーガーメニューの動作（既存のまま） ▼▼▼
+            menuOpen.addEventListener('click', () => {
+                overlayMenu.classList.add('active');
+            });
+
+            menuClose.addEventListener('click', () => {
+                overlayMenu.classList.remove('active');
+            });
+        </script>
+
+</body>
+
+</html>

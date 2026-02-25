@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zoutohanafansite.mapper.PostMapper">
+    <select id="getAllPosts"
+            parameterType="com.example.zoutohanafansite.entity.form.PostSearchForm"
+            resultType="com.example.zoutohanafansite.entity.post.Post">
+
+        SELECT *
+        FROM posts
+        WHERE deleted = false
+
+        -- キーワード検索
+        <if test="keyword != null and keyword != ''">
+            AND title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+        -- ステータス絞り込み
+        <if test="status != null and status.size() > 0">
+            AND status IN
+            <foreach collection="status" item="statusItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'公開'.equals(statusItem)">'PUBLIC'</when>
+                    <when test="'非公開'.equals(statusItem)">'PRIVATE'</when>
+                    <when test="'下書き'.equals(statusItem)">'DRAFT'</when>
+                </choose>
+            </foreach>
+        </if>
+
+        -- カテゴリー絞り込み
+        <if test="category != null and category.size() > 0">
+            AND category IN
+            <foreach collection="category" item="categoryItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'寄贈情報'.equals(categoryItem)">'DONATION'</when>
+                    <when test="'企画情報'.equals(categoryItem)">'PROJECT'</when>
+                    <when test="'その他情報'.equals(categoryItem)">'ELSE'</when>
+                </choose>
+            </foreach>
+        </if>
+
+        -- 作成日絞り込み
+        <if test="createdStartAt != null and createdEndAt != null">
+            <![CDATA[AND created_at >= #{createdStartAt}]]>
+            <![CDATA[AND created_at <= #{createdEndAt}]]>
+        </if>
+
+        -- 投稿日(公開日)絞り込み
+        <if test="postedStartAt != null">
+            <![CDATA[AND posted_at >= #{postedStartAt}]]>
+        </if>
+        <if test="postedEndAt != null">
+            <![CDATA[AND posted_at <= #{postedEndAt}]]>
+        </if>
+
+        -- 並べ替え
+        <choose>
+            <when test="sort == 'createdAt_desc'">ORDER BY created_at DESC</when>
+            <when test="sort == 'createdAt_asc'">ORDER BY created_at ASC</when>
+            <when test="sort == 'postedAt_desc'">ORDER BY posted_at DESC</when>
+            <when test="sort == 'postedAt_asc'">ORDER BY posted_at ASC</when>
+            <when test="sort == 'title_asc'">ORDER BY title ASC</when>
+            <when test="sort == 'title_desc'">ORDER BY title DESC</when>
+            <otherwise>ORDER BY created_at DESC</otherwise>
+        </choose>
+
+    </select>
+</mapper>

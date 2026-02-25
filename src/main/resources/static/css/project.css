@@ -1,0 +1,41 @@
+            body {
+                min-width: 465px;
+                min-height: 812px;
+                max-width: 768px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .container {
+                min-width: 450px;
+                max-width: 768px;
+                margin: 0 auto;
+                background-color: var(--back-color);
+                min-height: 100vh;
+                padding-bottom: 40px;
+                position: relative;
+            }
+
+            .book-section{
+                border-radius: 20px;
+            }
+
+            @media screen and (max-width: 768px) {
+                .container {
+                    margin: 0 auto;
+                    background-color: var(--back-color);
+                    min-height: 100vh;
+                    padding-bottom: 40px;
+                    position: relative;
+                }
+            }
+
+            @media screen and (max-width: 450px) {
+                .container {
+                    margin: 0 auto;
+                    background-color: var(--back-color);
+                    min-height: 100vh;
+                    padding-bottom: 40px;
+                    position: relative;
+                }
+            }

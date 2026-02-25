@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${project.name}">企画大賞発表</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <style th:inline="css">
+        :root {
+            --main-color: [(${
+                    project.themeColor.dbValue
+                })];
+
+            --sub-color: [(${
+                    project.themeColor.dbValue
+                })];
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/project/nominate-award.css}"
+        href="../../static/css/project/nominate-award.css">
+</head>
+
+<body class="no-scroll">
+    <div class="container">
+        <div class="img-box" id="tapTarget">
+            <div class="book-text" id="bookText">
+                <div>
+                    <h1>あなたの</h1>
+                    <h1>“読みたい”が</h1>
+                    <h1>次に並ぶ本を決めます</h1>
+                </div>
+                <div class="text-top">
+                    <p>たくさんの書評の投稿や、</p>
+                    <p>たくさんの投票</p>
+                    <p>ありがとうございました。</p>
+                </div>
+                <div class="text-box">
+                    <p>投票の多かった書評のなかで</p>
+                    <p>さらに多く読まれた本が</p>
+                    <p>今回の大賞となります。</p>
+                </div>
+                <div class="text-box">
+                    <p>たくさんの書評の中から</p>
+                    <p>大賞として選ばれた書評を</p>
+                    <p>ぜひ見てみましょう。</p>
+                </div>
+            </div>
+        </div>
+        <div class="next-section" id="nextStep">
+            <div id="shelf">
+                <section class="award-header">
+                    <div class="award-frame">
+                        <span class="frame top"></span>
+                        <span class="frame bottom"></span>
+                        <span class="frame left"></span>
+                        <span class="frame right"></span>
+                        <div class="award-box">
+                            <p class="award-label">文庫X</p>
+                            <h2 class="award-title">
+                                大賞ノミネート<br>
+                                心を奪われた作品です
+                            </h2>
+                        </div>
+                    </div>
+                    <p class="award-text">
+                        店頭で、手に取ったその瞬間のワクワク。
+                    </p>
+                    <p class="award-text">
+                        読み終えた後のあの衝撃。
+                    </p>
+                    <p class="award-text">
+                        競合ひしめく二次審査通過作の中から、<br>
+                        圧倒的な熱量で頂点に立ったのはこの作品です。
+                    </p>
+                </section>
+            </div>
+            <div id="award-display-area">
+                <div class="modal-overlay-award">
+                    <div class="modal-content">
+                        <div id="award-left-target"></div>
+                        <div id="shelf">
+                            <section class="award-header">
+                                <div class="award-frame">
+                                    <span class="frame top"></span>
+                                    <span class="frame bottom"></span>
+                                    <span class="frame left"></span>
+                                    <span class="frame right"></span>
+                                    <div class="award-box">
+                                        <p class="award-label">文庫X</p>
+                                        <h2 class="award-title">大賞受賞者</h2>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="profile-card">
+                            <div id="award-right-target"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ノミネート作品 -->
+            <div id="shelf">
+                <section class="award-header">
+                    <div class="award-frame">
+                        <span class="frame top"></span>
+                        <span class="frame bottom"></span>
+                        <span class="frame left"></span>
+                        <span class="frame right"></span>
+                        <div class="award-box">
+                            <p class="award-label">文庫X</p>
+                            <h2 class="award-title">
+                                ノミネート作品一覧
+                            </h2>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="book-shinto-container">
+                <div class="shinto-scroll-row" id="shelf-row-1">
+                </div>
+
+                <div class="shinto-scroll-row" id="shelf-row-2">
+                </div>
+            </div>
+            <div class="join-book">
+                <h3>参加作品</h3>
+                <hr>
+                <p>二次審査を通過した、選出された <br>
+                    10冊です。</p>
+            </div>
+
+            <div class="book-shinto-container">
+                <div class="shinto-scroll-row" id="shelf-row-3">
+                </div>
+
+                <div class="shinto-scroll-row" id="shelf-row-4">
+                </div>
+            </div>
+        </div>
+        <div class="one-book-box" id="voteReview">
+            <h3 class="you-one-text">あなたが選んだ１冊</h3>
+            <div class="one-text-box">
+                <p class="one-text">あなたが投票した作品です</p>
+            </div>
+            <div class="one-book-shinto-box">
+            </div>
+        </div>
+        <div class="section-title-area">
+            <div class="section-square"></div>
+            <h2 class="section-title">受賞の流れ</h2>
+        </div>
+        <section>
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="inversion-circle">
+                            <p class="Award-circle-step">STEP</p>
+                            <p class="Award-circle-1">01</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4>書店員による審査（一次審査）</h4>
+                        <p>投稿された書評は、書店員がチェックします。書店員の心を掴む書評であれば、一次審査通過となり、二次審査へ進むチャンスを得られます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="dashe-box">
+            <div class="dashe"></div>
+        </div>
+        <section>
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="inversion-circle">
+                            <p class="inversion-circle-step">STEP</p>
+                            <p class="inversion-circle-1">02</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4> 一般投票（二次審査）</h4>
+                        <p>一次審査を通過した作品は、読者（一般ユーザー）による投票に進みます。「最も読みたい」と思った作品に投票してもらい、投票数の多い上位10作品が二次審査を通過します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="dashe-box">
+            <div class="dashe"></div>
+        </div>
+        <section class="Award-bottom">
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="Award-circle">
+                            <p class="inversion-circle-step">STEP</p>
+                            <p class="inversion-circle-1">03</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4>販売・大賞決定</h4>
+                        <p>上位10作品は、推薦書評POP付きでさわや書店の店頭に並びます。一定期間の販売数を競い、最も売れた作品が大賞に選ばれます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="section-title-area">
+            <div class="section-square"></div>
+            <h2 class="section-title">販売店舗一覧</h2>
+        </div>
+        <div class="shop-area">
+
+            <div class="area-filter">
+                <button class="filter-btn active" data-filter="all">すべて</button>
+                <button class="filter-btn" data-filter="iwate">岩手</button>
+                <button class="filter-btn" data-filter="aomori">青森</button>
+            </div>
+
+            <div class="area-title" data-area="iwate">
+                <span>IWATE AREA</span>
+                <hr>
+            </div>
+
+            <div class="shop-card" data-area="iwate">
+                <div class="shop-info">
+                    <h3>さわや書店　本店</h3>
+                    <p class="shop-detail">盛岡市大通二丁目 2-15</p>
+                    <p class="shop-detail">019-653-4411</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="shop-card" data-area="iwate">
+                <div class="shop-info">
+                    <h3>さわや書店　フェザン店</h3>
+                    <p class="shop-detail">盛岡市盛岡駅前通１番４４号</p>
+                    <p class="shop-detail">019-625-6311</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="shop-card" data-area="iwate">
+                <div class="shop-info">
+                    <h3>さわや書店　松園店</h3>
+                    <p class="shop-detail">盛岡市北松園2-13-1</p>
+                    <p class="shop-detail">019-661-5383</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="shop-card" data-area="iwate">
+                <div class="shop-info">
+                    <h3>さわや書店　イオンタウン釜石店</h3>
+                    <p class="shop-detail">釜石市港町二丁目1-1</p>
+                    <p class="shop-detail">0193-55-6212</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="shop-card" data-area="iwate">
+                <div class="shop-info">
+                    <h3>さわや書店　宮古店（かんの書店）</h3>
+                    <p class="shop-detail">宮古市宮町一丁目3-7</p>
+                    <p class="shop-detail">0193-62-2548</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="area-title" data-area="aomori">
+                <span>AOMORI AREA</span>
+                <hr>
+            </div>
+
+            <div class="shop-card" data-area="aomori">
+                <div class="shop-info">
+                    <h3>さわや書店　野辺地店</h3>
+                    <p class="shop-detail">青森県上北郡野辺地町字</p>
+                    <p class="shop-detail">0175-64-1791</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+            <div class="shop-card" data-area="aomori">
+                <div class="shop-info">
+                    <h3>さわや書店　ラビナ店</h3>
+                    <p class="shop-detail">青森県青森市柳川1-2-3</p>
+                    <p class="shop-detail">017-718-8272</p>
+                </div>
+                <div class="shop-arrow"><a href="#">➤</a></div>
+            </div>
+
+        </div>
+
+        <!-- お問い合わせ -->
+        <div class="contact-box">
+            <div class="contact-card">
+                <h2 class="contact-title">お問い合わせ</h2>
+                <div class="contact-desc-box">
+                    <p class="contact-desc">企画、寄贈に関するご質問など、</p>
+                    <p class="contact-desc">お気軽にお問い合わせください。</p>
+                </div>
+                <a href="#" class="contact-btn">
+                    <span class="btn-text">お問い合わせフォーム</span>
+                    <span class="btn-arrow">&gt;</span>
+                </a>
+
+                <div class="tel-box">
+                    <div class="tel-main">
+                        <span class="tel-label">TEL</span>
+                        <span class="tel-number">000-0000-0000</span>
+                    </div>
+                    <p class="tel-hours">受付時間 ｜ 平日 9:00 ~ 17:00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- モーダル -->
+        <div id="bookDetailModal" class="modal-overlay">
+            <span id="closeModal" class="close-button">&times;</span>
+            <div style="width: 100%;">
+                <div class="modal-content">
+                    <div class="modal-box">
+                        <div class="modal-textFirst-box">
+                            <img th:src="@{/img/rose.png}" src="../../static/img/rose.png" class="modal-rose" alt="">
+
+                            <h3 id="modalTitle">作品タイトル</h3>
+
+                            <p id="textFirst" class="modal-textFirst">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img id="modalIcon" src="" class="profile-icon" alt="icon">
+
+                            <h3 id="modalName" class="profile-name">名前</h3>
+                        </div>
+
+                        <div class="profile-tags">
+                            <p id="modalInfo" style="font-size: 0.9rem; color: #555;"></p>
+                        </div>
+
+                        <hr class="profile-line">
+
+                        <div class="profile-bio">
+                            <p id="modalProfileText">
+                                ここに自己紹介が入ります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modalScrollOverlay" class="modal-scroll-overlay" style="display:none;">
+                <div class="scroll-guide">
+                    <p>下にスクロールしてみよう</p>
+                    <span class="arrow">↓</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{layout :: footer}"></div>
+    <script th:src="@{/js/nominate-award.js}" src="../../static/js/nominate-award.js" defer></script>
+</body>
+
+
+</html>

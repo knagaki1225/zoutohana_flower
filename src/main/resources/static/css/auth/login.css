@@ -1,0 +1,251 @@
+html,
+body {
+  overflow-x: hidden;
+  position: relative;
+  margin: 0;
+}
+
+.footer-outside {
+  color: var(--font-normal);
+}
+
+.login-header {
+  background-color: var(--main-color);
+  color: white;
+  padding: 40px;
+  padding-top: 3.5rem;
+  min-height: 5px;
+  z-index: 2;
+  width: 50%;
+  overflow: hidden;
+  border-bottom-left-radius: 55rem 6rem;
+  border-bottom-right-radius: 50rem 15rem;
+}
+
+.login-header-sub {
+  background-color: #f1f0e8;
+  padding: 40px;
+  padding-top: 5rem;
+  position: absolute;
+  /* ▼ 変更: absolute にして自由に配置 */
+  top: -30px;
+  left: 35%;
+  min-height: 5px;
+  overflow: hidden;
+  z-index: 10;
+  width: 90%;
+  /* ▼ 楕円にするための修正 ▼ */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 50rem 32rem;
+  border-bottom-right-radius: 50rem 15rem;
+}
+
+.header-wrapper {
+  background-color: var(--back-color);
+}
+
+/* 「もどる」ボタン */
+.back-link {
+  position: absolute;
+  top: 2.5rem;
+  left: 20px;
+  color: var(--text-white-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+  z-index: 20;
+}
+
+/* === メインコンテンツ (ロゴとフォーム) === */
+.login-main {
+  background-color: var(--back-color);
+  /* ▼ 変更: フォームがロゴの下に来るよう、余白を増やす */
+  padding-top: 80px;
+  position: relative;
+  /* ▼ 追加: ロゴ(absolute)の基準点 */
+  z-index: 5;
+  /* ▼ 追加: 重なり順 */
+}
+
+/* === ロゴエリア === */
+.logo-area {
+  text-align: center;
+  /* ▼▼▼ 以下をすべて追加 ▼▼▼ */
+  position: absolute;
+  top: 40px;
+  /* mainの上端から-100pxの位置へ (ヘッダーに重なる) */
+  left: 0;
+  right: 0;
+  z-index: 10;
+  /* S字カーブより手前、戻るボタンより奥 */
+}
+
+/* ロゴ画像（推奨） */
+.logo-image-placeholder {
+  width: 8rem;
+  height: auto;
+}
+
+/* === フォームコンテナ === */
+.form-container {
+  /* (変更なし) */
+  background-color: #ffffff;
+  border-radius: 30px 0;
+  padding: 30px 25px 3rem 30px;
+  margin-top: 8rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* === ボタン共通スタイル === */
+.btn {
+  /* (変更なし) */
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: none;
+  margin-top: 3rem;
+}
+
+/* ログインボタン (塗り) */
+.btn-login {
+  background-color: var(--main-color);
+  color: #f8f8f8;
+}
+
+/* 新規登録ボタン (線のみ) */
+.btn-register {
+  background-color: #fff;
+  color: var(--main-color);
+  border: 2px solid var(--main-color);
+}
+
+/* === リンク・区切り === */
+.forgot-password {
+  /* (変更なし) */
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #676767;
+  margin-top: 3rem;
+}
+
+.divider {
+  /* (変更なし) */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--font-normal);
+  margin: 3rem 0;
+}
+
+.divider::before,
+.divider::after {
+  /* (変更なし) */
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #535353;
+}
+
+.divider span {
+  /* (変更なし) */
+  padding: 0 15px;
+}
+
+/* 親 */
+.contact-form .form-field {
+  position: relative;
+  margin: 32px 0;
+}
+
+/* input */
+.contact-form .input-text {
+  display: block;
+  width: 100%;
+  height: 50px;
+  border-width: 0 0 2px 0;
+  border-color: var(--main-color);
+  font-size: 18px;
+  line-height: 26px;
+  margin-bottom: 50px;
+}
+
+/* フォーカス時 */
+.contact-form .input-text:focus {
+  outline: none;
+}
+
+/* フォーカス中 or 入力済み */
+.contact-form .input-text:focus + .label,
+.contact-form .input-text.not-empty + .label {
+  transform: translateY(-40px);
+}
+
+/* ラベル */
+.contact-form .label {
+  position: absolute;
+  bottom: 11px;
+  font-size: 18px;
+  color: #888;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* ===== タブレット向け ===== */
+@media (min-width: 500px) and (max-width: 1400px) {
+  /* ヘッダー幅を広げてS字カーブをバランス調整 */
+  .login-header {
+    width: 60%;
+    padding: 3.5rem 40px 4rem 40px;
+    border-bottom-left-radius: 55rem 8rem;
+    border-bottom-right-radius: 50rem 18rem;
+  }
+
+  .login-header-sub {
+    top: -35px;
+    left: 25%;
+    width: 90%;
+    border-bottom-left-radius: 50rem 35rem;
+    border-bottom-right-radius: 50rem 18rem;
+  }
+
+  /* ロゴ */
+  .logo-area {
+    top: 50px;
+  }
+
+  .logo-image-placeholder {
+    width: 10rem; /* スマホより大きめ */
+  }
+
+  /* フォームコンテナ */
+  .form-container {
+    width: 450px; /* 中央にカード表示 */
+    margin: 10rem auto 0 auto; /* 上マージンを少し広く */
+    padding: 40px 35px 3rem 35px;
+    border-radius: 30px;
+  }
+
+  /* フォームグループ */
+  .form-field {
+    margin-bottom: 24px;
+  }
+
+  /* ボタン */
+  .btn {
+    padding: 16px;
+    font-size: 1.3rem;
+  }
+
+  /* 戻るボタン */
+  .back-link {
+    top: 2.8rem;
+    left: 25px;
+    font-size: 1.25rem;
+  }
+}

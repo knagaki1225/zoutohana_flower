@@ -1,0 +1,188 @@
+body {
+  margin: 0;
+  background-color: var(--main-color);
+  color: #535353;
+}
+
+/* === ヘッダー (前画面と共通) === */
+.signup-header {
+  color: var(--text-white-color);
+  padding: 20px;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.signup-header h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 3rem;
+}
+
+.back-link {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  color: var(--text-white-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* === フォームコンテナ (前画面と共通) === */
+.form-container {
+  background-color: var(--back-color);
+  border-radius: 30px 30px 0px 0px;
+  padding: 4rem 25px;
+  margin-top: 2rem;
+}
+
+/* === ▼▼▼ ここから確認画面専用スタイル ▼▼▼ === */
+
+/* 案内テキスト */
+.intro-text {
+  /* ▼ positionやwidthを削除し、中央揃えに ▼ */
+  font-size: 1.1rem;
+  /* 画像に合わせて調整 */
+  color: var(--font-normal);
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 35px;
+  font-weight: bold;
+  /* 下のリストとの間隔 */
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  /* 各項目の間隔 */
+  /* ▼ ▼ ▼ 左右にマージンを追加して狭くする ▼ ▼ ▼ */
+  margin-left: 20px;
+  margin-top: 3rem;
+  margin-right: 20px;
+}
+
+.detail-item {
+  width: 100%;
+}
+
+.detail-item label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--font-normal);
+}
+
+/* 値の表示 (下線付き) */
+.value-display {
+  font-size: 1.4rem;
+  color: var(--font-normal);
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #535353;
+}
+
+/* 居住地用 (インライン表示) */
+.value-display.inline-values span {
+  margin-right: 15px;
+  /* 岩手県と盛岡市の間隔 */
+}
+
+/* 生年・性別の横並び用 */
+.inline-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  /* 項目間のマージン */
+}
+
+.detail-item.half-width {
+  width: 50%;
+  /* 2つの項目を均等に配置 */
+  flex-grow: 1;
+}
+
+/* 自己紹介 (下線なし) */
+.value-display-bio {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--font-normal);
+  padding-top: 5px;
+  padding-left: 1rem;
+  /* var(--text-white-color);-space: pre-wrap; (HTMLの<br>で改行) */
+}
+
+/* アカウント作成ボタン */
+.btn-create-account {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border-radius: 30px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: none;
+  background-color: var(--main-color);
+  /* 画像のピンク色 */
+  color: var(--text-white-color);
+  margin-top: 40px;
+  /* リストとの間隔 */
+}
+
+/* アイコングリッド */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 90%;
+  margin: 40px auto;
+  place-items: center;
+}
+
+/* 丸アイコン共通 */
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff8dc;
+  border: 6px solid #dcdcdc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+
+.flower {
+  width: 20px;
+  height: auto;
+}
+
+.elephant {
+  width: 25px;
+  height: auto;
+}
+
+/* 選択中（左下の象） */
+.icon.active {
+  border-color: #3a8f9e;
+}
+
+/* 右上の丸バッジ */
+.icon.active .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  width: 15px;
+  height: 15px;
+  background: #3a8f9e;
+  border-radius: 50%;
+  border: 4px solid #fbf7f3;
+}

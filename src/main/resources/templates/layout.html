@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>top</title>
+  <link rel="stylesheet" href="../../static/css/main.css">
+  <link rel="stylesheet" href="../../static/css/fansite/top.css">
+</head>
+
+<body>
+  <div th:fragment="header">
+    <header class="project-header">
+      <div class="logo-placeholder"><img th:src="@{/img/zoutohana-jitsubutsu.png}"
+          src="../../static/img/zoutohana-jitsubutsu.png" style="width: 3rem;" alt=""></div>
+      <div style="display: flex;">
+        <a th:href="@{/mypage/notification}" sec:authorize="isAuthenticated()">
+          <div class="mail-icon">
+            <span class="mail-badge" th:if="${unreadCount != 0}" th:text="${unreadCount}"></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 6h20v12H2z" fill="none" stroke="white" stroke-width="2" />
+              <path d="M2 6l10 7 10-7" fill="none" stroke="white" stroke-width="2" />
+            </svg>
+          </div>
+        </a>
+
+        <div class="menu-icon" id="menuOpen">
+          <div class="menu-icon-box">
+            <span class="span-top"></span>
+            <span class="span-middle"></span>
+            <span class="span-bottom"></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ヘッダーモーダル-->
+    <div class="overlay-menu" id="overlayMenu">
+      <div class="close-btn" id="menuClose">×</div>
+      <img th:src="@{/img/zoutohana-white-color.png}" src="../img/zoutohana-white-color.png" class=""
+        style="width: 5rem;" alt="">
+      <ul class="menu-list">
+        <li class="menu-item"><a th:href="@{/news(category='new')}" href=""
+            style="text-decoration: none; color:white;">お知らせ</a></li>
+
+        <li class="menu-item"><a th:href="@{/projects(s=ongoing)}" href=""
+            style="text-decoration: none; color:white;">企画一覧</a></li>
+
+        <li class="menu-item"><a th:href="@{/}" href="" style="text-decoration: none; color:white;">象と花プロジェクト</a></li>
+
+        <li class="menu-item"><a th:href="@{/#contact}" id="contact-link"
+            style="text-decoration: none; color:white;">お問い合わせ</a></li>
+
+        <li class="menu-item">
+          <a sec:authorize="isAnonymous()" th:href="@{/login}" href="" style="text-decoration: none; color:white;">ログイン</a>
+          <a sec:authorize="isAuthenticated()" th:href="@{/mypage}" href="" style="text-decoration: none; color:white;">マイページ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div th:fragment="contact">
+    <div class="contact-box" id="contact">
+      <div class="contact-card">
+        <h2 class="contact-title">お問い合わせ</h2>
+        <div class="contact-desc-box">
+          <p class="contact-desc">企画、寄贈に関するご質問など、</p>
+          <p class="contact-desc">お気軽にお問い合わせください。</p>
+        </div>
+        <a href="#" class="contact-btn">
+          <span class="btn-text">お問い合わせフォーム</span>
+          <span class="btn-arrow">&gt;</span>
+        </a>
+
+        <div class="tel-box">
+          <div class="tel-main">
+            <span class="tel-label">TEL</span>
+            <span class="tel-number">000-0000-0000</span>
+          </div>
+          <p class="tel-hours">受付時間 ｜ 平日 9:00 ~ 17:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <div th:fragment="footer">
+    <footer class="footer-all">
+      <div class="footer-menu">
+        <div class="footer-top">
+          <img th:src="@{/img/zoutohana-white.png}" src="../../static/img/zoutohana-white.png" style="width: 4.5rem;" alt="">
+          <p class="footer-white-text">A BOOK PROJECT</p>
+        </div>
+        <a th:href="@{/news(category='new')}" class="footer-menu-item-top">
+          <p>お知らせ</p>
+          <p>></p>
+        </a>
+        <a th:href="@{/projects(s=ongoing)}" href="#" class="footer-menu-item">
+          <p>企画</p>
+          <p>></p>
+        </a>
+        <a th:href="@{/}" class="footer-menu-item">
+          <p>象と花プロジェクト</p>
+          <p>></p>
+        </a>
+        <a th:href="@{/#contact}" class="footer-menu-item">
+          <p>お問い合わせ</p>
+          <p>></p>
+        </a>
+
+        <div style="text-align: center; padding: 50px; color: white; font-size:18px">
+          <p>@象と花プロジェクト</p>
+        </div>
+
+
+      </div>
+
+
+
+    </footer>
+  </div>
+</div>
+</body>
+
+</html>
+
+<script>
+  // ▼▼▼ 要素を取得 ▼▼▼
+  const menuOpen = document.getElementById('menuOpen');   // ハンバーガーメニューのアイコン
+  const menuClose = document.getElementById('menuClose'); // ハンバーガーメニューの閉じるボタン
+  const overlayMenu = document.getElementById('overlayMenu'); // ハンバーガーメニュー本体
+
+  const gearButton = document.querySelector('.settings-icon'); // 歯車アイコン
+  const settingsModal = document.getElementById('settingsModal'); // 設定モーダル本体
+
+  // ▼▼▼ ハンバーガーメニューの動作（既存のまま） ▼▼▼
+  menuOpen.addEventListener('click', () => {
+    overlayMenu.classList.add('active');
+  });
+
+  menuClose.addEventListener('click', () => {
+    overlayMenu.classList.remove('active');
+  });
+</script>
+
+<script>
+  // 企画一覧のタブメニュー
+  const tabs = document.querySelectorAll('.tab');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function () {
+      // 全てのタブからactiveクラスとmarkerを削除
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        const marker = t.querySelector('.marker');
+        if (marker) marker.remove();
+      });
+
+      // クリックされたタブにactiveクラスを追加
+      this.classList.add('active');
+
+      // マーカーを追加
+      const marker = document.createElement('span');
+      marker.classList.add('marker');
+      this.appendChild(marker);
+    });
+  });
+</script>

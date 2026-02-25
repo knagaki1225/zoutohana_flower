@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トップ</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/fansite/top.css}" href="../../static/css/fansite/top.css">
+</head>
+
+<body>
+<div th:replace="~{layout :: header}"></div>
+    <div class="container">
+        <section class="about-section">
+            <div class="about-wrapper">
+                <h2 class="about-title">象と花ファンサイトについて</h2>
+                <p class="about-subtitle">ABOUT US</p>
+                <div class="about-line"></div>
+
+                <div class="about-text-box">
+                    <p class="about-text">象と花は</p>
+                    <p class="about-text">これまで子どもたちへ「本」を届ける活動を</p>
+                    <p class="about-text">中心に行ってきました。</p>
+                    <p class="about-text">その活動は地域のみなさまから寄せられた古本を</p>
+                    <p class="about-text">次の誰かへとつないでいくことで成り立っています。</p>
+                </div>
+                <div class="about-text-box">
+                    <p class="about-text">本の循環を継続的に生み出すためには</p>
+                    <p class="about-text">、まず大人が新しい本を手に取ることが欠かせません。</p>
+                    <p class="about-text">このファンサイトは、</p>
+                    <p class="about-text">本と出合う「最初の一歩」を</p>
+                    <p class="about-text">、楽しみながら踏み出してもらうために生まれました。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-info">
+            <div class="section-title-area">
+                <h2 class="section-title">最新のお知らせ<span class="section-title-text">infomation</span></h2>
+                <div class="seciton-green"></div>
+            </div>
+            <div class="news-list" th:if="${!#lists.isEmpty(posts)}">
+                <div th:each="post : ${posts}">
+                    <a th:href="@{/news/{id}(id=${post.id})}" href="#" class="news-item">
+                        <div class="news-body">
+                            <div class="news-meta">
+                                <span th:text="${#temporals.format(post.postedAt, 'yyyy.MM.dd')}"
+                                    class="news-date">2025.01.01</span>
+                                <span th:text="${'#' + post.getCategory.label}" class="news-tag">#企画情報</span>
+                            </div>
+                            <div class="news-box">
+                                <p th:text="${post.title}" class="news-title">「文庫X 2.0」開始</p>
+                                <span class="news-arrow">&gt;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{/news(category='new')}" href="../info/post-list.html?category=new"
+                    class="btn btn-next-step" id="btn-next-step">
+                    お知らせ一覧へ
+                </a>
+            </div>
+        </section>
+        <div class="colored-section">
+            <div style="background-color: white;">
+                <div class="wave-divider wave-top">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                        preserveAspectRatio="none">
+                        <path
+                            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                            opacity=".25" class="shape-fill"></path>
+                    </svg>
+                </div>
+                <div class="wave-divider wave-bottom">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                        preserveAspectRatio="none">
+                        <path
+                            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                            opacity=".25" class="shape-fill"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <section style="background-color: white;">
+            <div class="section-title-area">
+                <h2 class="section-title-project">企画一覧<span class="section-title-text">project</span></h2>
+                <div class="seciton-green-project"></div>
+            </div>
+            <div class="tab-wrapper">
+                <div class="tab active">
+                    開催中
+                    <span class="marker"></span>
+                </div>
+                <div class="tab">
+                    過去の企画
+                </div>
+            </div>
+            <div class="card-box" id="ongoing" th:if="${#lists.isEmpty(ongoingProjects)}">
+                <div>現在開催中の企画はありません</div>
+            </div>
+
+            <div th:if="${pastProjects == null}" class="card-body hidden" id="past">
+                <div>過去の企画はありません。</div>
+            </div>
+
+
+            <div class="card-box" id="ongoing" th:unless="${#lists.isEmpty(ongoingProjects)}">
+                <div class="card" th:each="project : ${ongoingProjects}">
+                    <a th:href="@{/project/{urlKey}(urlKey = ${project.urlKey})}" href="" class="project-a">
+                        <div class="card-image-wrapper">
+                            <div th:text="${project.name}"
+                                th:style="'background-color: ' + ${project.themeColor.getDbValue()}" class="badge">開催中
+                            </div>
+                            <img th:if="${project.mainImgUrl == null}" th:src="@{/img/img.png}"
+                                src="../../static/img/img.png" alt="商品画像">
+                            <img th:unless="${project.mainImgUrl == null}"
+                                th:src="@{|/api/image/${project.mainImgUrl}|}">
+                        </div>
+                        <div class="card-content">
+                            <div class="date-row">
+                                <span class="date-label">開催期間</span>
+                                <span
+                                    th:text="${#temporals.format(project.projectStartAt, 'yyyy.MM.dd') + ' - ' + #temporals.format(project.projectEndAt, 'yyyy.MM.dd')}">2025.01.01
+                                    - 2025.01.01</span>
+                            </div>
+                            <p th:text="${project.introduction}" class="description">
+                                文庫Xとは、書店員が「読んでほしい」と思った1冊を、タイトルも著者名も隠して販売するプロモーション企画です。
+                                今回は第二弾です。
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>        
+
+            <div th:unless="${pastProjects == null}" class="card-box hidden" id="past">
+                <div class="card" th:each="project : ${pastProjects}">
+                    <a th:href="@{/project/{urlKey}(urlKey = ${project.urlKey})}" href="" class="project-a">
+                        <div class="card-image-wrapper">
+                            <div th:text="${project.name}"
+                                th:style="'background-color: ' + ${project.themeColor.getDbValue()}" class="badge">開催中
+                            </div>
+                            <img th:if="${project.mainImgUrl == null}" th:src="@{/img/img.png}"
+                                src="../../static/img/img.png" alt="商品画像">
+                            <img th:unless="${project.mainImgUrl == null}"
+                                th:src="@{|/api/image/${project.mainImgUrl}|}">
+                        </div>
+                        <div class="card-content">
+                            <div class="date-row">
+                                <span class="date-label">開催期間</span>
+                                <span
+                                    th:text="${#temporals.format(project.projectStartAt, 'yyyy.MM.dd') + ' - ' + #temporals.format(project.projectEndAt, 'yyyy.MM.dd')}">2025.01.01
+                                    - 2025.01.01</span>
+                            </div>
+                            <p th:text="${project.introduction}" class="description">
+                                文庫Xとは、書店員が「読んでほしい」と思った1冊を、タイトルも著者名も隠して販売するプロモーション企画です。
+                                今回は第二弾です。
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 企画一覧ボタン -->
+            <div>
+                <a th:href="@{/projects(s='ongoing')}" href="plan-list.html" class="btn btn-next-step"
+                    id="btn-next-step">
+                    企画一覧へ
+                </a>
+            </div>
+        </section>
+        <div class="colored-section">
+            <div style="background-color: white;">
+                <div class="wave-divider wave-top">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                        preserveAspectRatio="none">
+                        <path
+                            d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
+                            opacity=".25" class="shape-fill"></path>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+        <!-- お問い合わせ -->
+        <div th:replace="~{layout :: contact}"></div>
+    </div>
+
+<!-- フッター -->
+<div th:replace="~{layout :: footer}"></div>
+<script th:src="@{/js/hamburger.js}"></script>
+<script>
+    // 企画一覧のタブメニュー
+    const tabs = document.querySelectorAll('.tab');
+    const ongoingBox = document.getElementById('ongoing');
+    const pastBox = document.getElementById('past');
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', function () {
+            // 1. 全てのタブからactiveクラスとmarkerを削除
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                const marker = t.querySelector('.marker');
+                if (marker) marker.remove();
+            });
+
+            // 2. クリックされたタブにactiveクラスとマーカーを追加
+            this.classList.add('active');
+            const marker = document.createElement('span');
+            marker.classList.add('marker');
+            this.appendChild(marker);
+
+            // 3. コンテンツの表示・非表示の切り替え
+            if (index === 0) {
+                // 「開催中」タブが押された時
+                ongoingBox.classList.remove('hidden');
+                pastBox.classList.add('hidden');
+            } else {
+                // 「過去の企画」タブが押された時
+                ongoingBox.classList.add('hidden');
+                pastBox.classList.remove('hidden');
+            }
+        });
+    });
+
+</script>
+</body>
+
+</html>

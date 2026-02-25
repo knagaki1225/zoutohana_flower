@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${param.id}">書評投稿ログイン</title>
+    <title th:unless="${param.id}">ログイン</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+
+    <link th:href="@{/css/main.css}" rel="stylesheet" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+
+    <link th:href="@{/css/auth/login.css}" rel="stylesheet" href="../../static/css/auth/login.css">
+
+</head>
+
+<body>
+    <div class="page-clip">
+
+        <div class="header-wrapper">
+            <div class="login-header">
+                <a th:href="@{/}" href="../../static/fansite/top.html" class="back-link">&lt; もどる</a>
+            </div>
+            <div class="login-header-sub"></div>
+        </div>
+
+        <main class="login-main">
+
+            <div class="logo-area">
+
+                <img th:src="@{/img/zoutohana-jitsubutsu.png}" src="../../static/img/象と花実物.png" alt="ロゴ"
+                    class="logo-image-placeholder">
+
+            </div>
+
+            <section class="form-container">
+
+
+                <form th:action="@{/login(id=${param.id})}" method="post" id="login-form" class="contact-form row">
+
+                    <div class="form-field col x-50">
+                        <input id="account-id" class="input-text js-input" type="text" name="username" required>
+                        <label class="label" for="account-id">アカウントID</label>
+                    </div>
+
+                    <div class="form-field col x-50">
+                        <input id="password" class="input-text js-input" type="password" name="password" required>
+                        <label class="label" for="password">パスワード</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-login login-btn" id="login-submit-btn">ログイン</button>
+
+                    <th:block th:if="${param.id != null}">
+                        <a th:href="@{/password-reset(id=${param.id})}" href="new-account.html"
+                            class="forgot-password">パスワードをお忘れですか？</a>
+
+                        <div class="divider">
+                            <span>または</span>
+                        </div>
+                        <a th:href="@{/signup(id=${param.id})}" href="signup.html" class="btn btn-register">新規登録</a>
+                    </th:block>
+
+                </form>
+
+                <footer class="footer-inside">
+                    <p>&copy; 象と花プロジェクト</p>
+                </footer>
+
+            </section>
+
+            <footer class="footer-outside">
+                <p>&copy; 象と花プロジェクト</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+
+
+    <!--    <script>-->
+    <!--        // 管理者画面で決めた色をバックから送ってきて、フロントで CSS 変数に反映させるやり方-->
+    <!--        // バックからJSONで返すようにしてそれを反映-->
+    <!--        async function loadTheme() {-->
+    <!--            try {-->
+    <!--                const response = await fetch('/api/theme'); // バックのURL-->
+    <!--                const theme = await response.json();-->
+
+    <!--                // CSS変数にセット-->
+    <!--                setThemeVariable('&#45;&#45;main-color', theme.mainColor);-->
+    <!--                setThemeVariable('&#45;&#45;back-color', theme.backColor);-->
+    <!--                setThemeVariable('&#45;&#45;font-normal', theme.fontNormal);-->
+    <!--                setThemeVariable('&#45;&#45;text-white-color', theme.textWhiteColor);-->
+
+    <!--            } catch (err) {-->
+    <!--                console.error("テーマ読み込み失敗:", err);-->
+    <!--            }-->
+    <!--        }-->
+
+    <!--        // ページ読み込み時に適用-->
+    <!--        window.addEventListener("DOMContentLoaded", loadTheme);-->
+    <!--    </script>-->
+    <!--    &lt;!&ndash; jsでセットテーマを変えてcssの色を一括で変更するやり方-->
+    <!--        window.addEventListener("DOMContentLoaded", () => {-->
+    <!--            setLightTheme();-->
+    <!--        }); &ndash;&gt;-->
+    <!--    <script src="../../static/js/login.js"></script>-->
+    <!--    <script src="../../static/js/theme.js"></script>-->
+
+    <!-- jQuery 読み込み（最後のbody閉じタグの前でOK） -->
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.js-input').keyup(function () {
+                if ($(this).val()) {
+                    $(this).addClass('not-empty');
+                } else {
+                    $(this).removeClass('not-empty');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

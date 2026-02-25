@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="#" th:href="@{/}">    <!-- CSSファイル -->
+</head>
+<body>
+    <div th:replace="~{layout-admin :: header}"></div>
+    <main>
+      <table border="1" style="margin: 0 auto;">
+        <tr><th colspan="4" style="background-color: lightgray;">管理者自身</th></tr>
+        <tr><td>jsok</td><td>backok</td><th>管理者ログイン</th><td><a href="login.html">login.html</a></td></tr>
+        <tr><td>nojs</td><td>backok</td><th>管理者トップ</th><td><a href="top.html">top.html</a></td></tr>
+
+        <tr><th colspan="4" style="background-color: lightgray;">利用者アカウント</th></tr>
+        <tr><td>jsok</td><td>-</td><th>利用者一覧</th><td><a href="account_list.html">account_list.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>利用者詳細</th><td><a href="account_view.html">account_view.html</a></td></tr>
+
+        <tr><th colspan="4" style="background-color: lightgray;">企画</th></tr>
+        <tr><td>jsok</td><td>-</td><th>企画一覧</th><td><a href="project_list.html">project_list.html</a></td></tr>
+        <tr><td>jsok</td><td>-</td><th>企画編集・情報</th><td><a href="project_edit.html">project_edit.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>企画編集確認</th><td><a href="project_edit_confirm.html">project_edit_confirm.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>企画作成</th><td><a href="project_create.html">project_create.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>企画作成確認</th><td><a href="project_create_confirm.html">project_create_confirm.html</a></td></tr>
+
+        <tr><th colspan="4" style="background-color: lightgray;">書評</th></tr>
+        <tr><td>jsok</td><td>-</td><th>書評一覧</th><td><a href="review_list.html">review_list.html</a></td></tr>
+        <tr><td>jsok</td><td>-</td><th>書評詳細</th><td><a href="review_edit.html">review_edit.html</a></td></tr>
+        <tr><td>jsok</td><td>-</td><th>書評印刷</th><td><a href="review_print.html">review_print.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>書評ジャンル一覧</th><td><a href="book_genre_list.html">book_genre_list.html</a></td></tr>
+
+        <tr><th colspan="4" style="background-color: lightgray;">個別通知</th></tr>
+        <tr><td>jsok</td><td>-</td><th>個別通知送信</th><td><a href="notification.html">notification.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>個別通知テンプレート一覧</th><td><a href="notification_template_list.html">notification_template_list.html</a></td></tr>
+        <tr><td>jsok</td><td>-</td><th>個別通知テンプレート編集</th><td><a href="notification_template_edit.html">notification_template_edit.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>個別通知テンプレート編集確認</th><td><a href="notification_template_edit_confirm.html">notification_template_edit_confirm.html</a></td></tr>
+        <tr><td>jsok</td><td>-</td><th>個別通知テンプレート作成</th><td><a href="notification_template_create.html">notification_template_create.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>個別通知テンプレート作成確認</th><td><a href="notification_template_create_confirm.html">notification_template_create_confirm.html</a></td></tr>
+
+        <tr><th colspan="4" style="background-color: lightgray;">お知らせ</th></tr>
+        <tr><td>jsok</td><td>-</td><th>お知らせ一覧</th><td><a href="post_list.html">post_list.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>お知らせ編集・情報</th><td><a href="post_edit.html">post_edit.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>お知らせ編集確認</th><td><a href="post_edit_confirm.html">post_edit_confirm.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>お知らせ作成</th><td><a href="post_create.html">post_create.html</a></td></tr>
+        <tr><td>nojs</td><td>-</td><th>お知らせ作成確認</th><td><a href="post_create_confirm.html">post_create_confirm.html</a></td></tr>
+      </table>
+    </main>
+
+    <script>
+      const tds = document.querySelectorAll('td');
+
+      tds.forEach(td => {
+        td.style.padding = '0.2rem 0.5rem';
+        if (td.textContent === 'jsok' || td.textContent === 'backok') {
+          td.style.backgroundColor = 'blue';
+          td.style.color = 'white';
+        } else if (td.textContent === 'nojs') {
+          td.style.backgroundColor = 'gray';
+          td.style.color = 'white';
+        } else if (td.textContent === 'wip') {
+          td.style.backgroundColor = 'red';
+          td.style.color = 'black';
+        }
+      });
+    </script>
+</body>
+</html>

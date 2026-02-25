@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zoutohanafansite.mapper.ProjectMapper">
+    <select id="getAllProjects"
+            parameterType="com.example.zoutohanafansite.entity.form.ProjectSearchForm"
+            resultType="com.example.zoutohanafansite.entity.admin.project.ProjectCard">
+
+        SELECT
+        p.*,
+        COUNT(r.id) AS review_count
+        FROM projects p
+        LEFT JOIN reviews r
+        ON r.project_id = p.id
+        WHERE p.deleted = false
+
+        -- キーワード検索
+        <if test="keyword != null and keyword != ''">
+            AND (
+            p.name LIKE CONCAT('%', #{keyword}, '%')
+            OR p.url_key LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        -- ステータス絞り込み
+        <if test="status != null and status.size() > 0">
+            AND p.status IN
+            <foreach collection="status" item="statusItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'書評投稿期間前'.equals(statusItem)">'BEFORE_SUBMISSION'</when>
+                    <when test="'書評投稿期間'.equals(statusItem)">'DURING_SUBMISSION'</when>
+                    <when test="'一次審査'.equals(statusItem)">'FIRST_PHASE'</when>
+                    <when test="'二次審査投票'.equals(statusItem)">'SECOND_PHASE_VOTING'</when>
+                    <when test="'二次審査確認'.equals(statusItem)">'SECOND_PHASE_VERIFY'</when>
+                    <when test="'ノミネート決定'.equals(statusItem)">'SECOND_PHASE_RESULT'</when>
+                    <when test="'大賞決定'.equals(statusItem)">'AWARD_ANNOUNCEMENT'</when>
+                    <otherwise>#{statusItem}</otherwise>
+                </choose>
+            </foreach>
+        </if>
+
+        -- 公開/非公開絞り込み
+        <if test="published != null and published.size() > 0">
+            AND p.published IN
+            <foreach collection="published" item="publishedItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'公開'.equals(publishedItem)">true</when>
+                    <when test="'非公開'.equals(publishedItem)">false</when>
+                </choose>
+            </foreach>
+        </if>
+
+        -- 企画開催期間絞り込み
+        <if test="startAt != null and endAt != null">
+            <![CDATA[AND p.project_start_at >= #{startAt}]]>
+            <![CDATA[AND p.project_end_at <= #{endAt}]]>
+        </if>
+
+        GROUP BY p.id
+
+        -- 並べ替え
+        <choose>
+            <when test="sort == 'created_desc'">ORDER BY p.created_at DESC</when>
+            <when test="sort == 'created_asc'">ORDER BY p.created_at ASC</when>
+            <when test="sort == 'startAt_asc'">ORDER BY p.project_start_at ASC</when>
+            <when test="sort == 'startAt_desc'">ORDER BY p.project_start_at DESC</when>
+            <when test="sort == 'endAt_asc'">ORDER BY p.project_end_at ASC</when>
+            <when test="sort == 'endAt_desc'">ORDER BY p.project_end_at DESC</when>
+            <when test="sort == 'urlKey_asc'">ORDER BY p.url_key ASC</when>
+            <when test="sort == 'urlKey_desc'">ORDER BY p.url_key DESC</when>
+            <otherwise>ORDER BY p.created_at DESC</otherwise>
+        </choose>
+
+    </select>
+</mapper>

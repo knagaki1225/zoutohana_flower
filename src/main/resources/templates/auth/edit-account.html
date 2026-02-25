@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+<head><link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アカウント編集</title>
+
+    <link th:href="@{/css/main.css}" rel="stylesheet" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+    <link rel="stylesheet" th:href="@{/css/auth/edit-account.css}" href="../../static/css/auth/edit-account.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="signup-header">
+        <a href="login.html" class="back-link">&lt;&nbsp;&nbsp;もどる</a>
+        <h1><i class="fas fa-user-plus"></i> アカウント編集</h1>
+    </header>
+    <main>
+        <div class="form-container">
+            <form id="signup-form" th:action="@{/auth/edit}" th:object="${accountEditForm}" method="post">
+                <div class="form-group">
+                    <label for="account-id">アカウントID <span style="color: #FF4564">(*あとから変更できません)</span></label>
+                    <p th:text="${loginId}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="nickname">ニックネーム</label>
+                    <input th:field="*{nickname}" type="text" id="nickname" name="nickname">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" th:field="*{icon}" name="icon" id="iconValue" value="1">
+                    <label>アイコン</label>
+
+                    <div class="icon-grid">
+                        <!-- 花 -->
+                        <div class="icon" th:classappend="${accountEditForm.icon == 1} ? 'active badge' : ''" data-value="1">
+                            <img th:src="@{/api/image/icon1.png}" src="../../static/img/flower-pink.png" class="flower" alt="花１">
+                            <span class="badge"></span>
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 2} ? 'active badge' : ''" data-value="2">
+                            <img th:src="@{/api/image/icon2.png}" src="../../static/img/flower-blue.png" class="flower" alt="花２">
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 3} ? 'active badge' : ''" data-value="3">
+                            <img th:src="@{/api/image/icon3.png}" src="../../static/img/flower-purple.png" class="flower" alt="花３">
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 4} ? 'active badge' : ''" data-value="4">
+                            <img th:src="@{/api/image/icon4.png}" src="../../static/img/flower-green.png" class="flower" alt="花４">
+                        </div>
+
+                        <!-- 象 -->
+                        <div class="icon" th:classappend="${accountEditForm.icon == 5} ? 'active badge' : ''" data-value="5">
+                            <img th:src="@{/api/image/icon5.png}" src="../../static/img/elephant-pink.png" class="elephant" alt="象１">
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 6} ? 'active badge' : ''" data-value="6">
+                            <img th:src="@{/api/image/icon6.png}" src="../../static/img/elephant-blue.png" class="elephant" alt="象２">
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 7} ? 'active badge' : ''" data-value="7">
+                            <img th:src="@{/api/image/icon7.png}" src="../../static/img/elephant-purple.png" class="elephant" alt="象３">
+                        </div>
+                        <div class="icon" th:classappend="${accountEditForm.icon == 8} ? 'active badge' : ''" data-value="8">
+                            <img th:src="@{/api/image/icon8.png}" src="../../static/img/elephant-green.png" class="elephant" alt="象４">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="postal-code">居住地</label>
+                    <div class="postal-code-wrapper">
+                        <span>〒</span>
+                        <input type="number" placeholder="" id="postal-code" name="postal-code">
+                    </div>
+                    <p class="note">郵便番号を入力すると、住所の一部が自動的に表示されます。なお、郵便番号は登録されません。</p>
+                    <div class="address-display">
+                        <span id="prefecture" th:text="${#strings.substringBefore(accountEditForm.address, ' ')}"></span>
+                        <span id="city" th:text="${#strings.substringAfter(accountEditForm.address, ' ')}"></span>
+                        <input type="hidden" th:field="*{address}" id="address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birth-year">生年</label>
+                    <select th:field="*{birthYear}" id="birth-year" name="birth-year">
+                        <option th:value="${accountEditForm.birthYear}" selected>[[${accountEditForm.birthYear}]]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>性別</label>
+                    <div class="radio-group">
+                        <input type="radio" id="male" name="gender" value="male" checked>
+                        <label for="male" class="radio-label">男性</label>
+
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female" class="radio-label">女性</label>
+
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other" class="radio-label">その他</label>
+                    </div>
+                </div>
+
+                <div class="form-group bio-wrapper">
+                    <label for="bio">自己紹介 <span class="optional-tag">任意</span></label>
+                    <textarea th:field="*{selfIntroduction}" id="bio" name="bio" rows="6"></textarea>
+                    <div class="char-count"><span id="current-count">0</span>/300文字</div>
+                </div>
+                <hr class="form-divider">
+                <button class="btn-confirmation btn-submit" id="btn-to-confirm">編集を確定する</button>
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- フォーム用スクリプト ---
+            // 生年セレクトボックス
+            const yearSelect = document.getElementById('birth-year');
+            if (yearSelect) {
+                const currentYear = new Date().getFullYear();
+                const startYear = 1930;
+                const endYear = currentYear;
+
+                // HTMLに <option value="" selected hidden> がある前提
+                for (let year = endYear; year >= startYear; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
+                }
+
+                // 選択状態によって色を切り替える (CSS側で処理)
+                yearSelect.addEventListener('change', function () {
+                    if (this.value === "" || this.value === "選択してください") {
+                        this.classList.remove('has-value');
+                    } else {
+                        this.classList.add('has-value');
+                    }
+                });
+            }
+
+            // 郵便番号 → 住所
+            const postalInput = document.getElementById('postal-code');
+            const prefDisplay = document.getElementById('prefecture');
+            const cityDisplay = document.getElementById('city');
+            const address = document.getElementById('address');
+
+            if (postalInput) {
+                postalInput.addEventListener('input', function () {
+                    const postal = postalInput.value.replace(/[^0-9]/g, '');
+
+                    if (postal.length === 7) {
+                        fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postal}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.results) {
+                                    const result = data.results[0];
+                                    prefDisplay.textContent = result.address1;
+                                    cityDisplay.textContent = result.address2;
+                                    address.value = result.address1 + ' ' + result.address2;
+
+                                } else {
+                                    prefDisplay.textContent = "";
+                                    cityDisplay.textContent = "住所が見つかりません";
+                                }
+                            })
+                            .catch(() => {
+                                prefDisplay.textContent = "";
+                                cityDisplay.textContent = "住所検索エラー";
+                            });
+                    } else {
+                        prefDisplay.textContent = "";
+                        cityDisplay.textContent = "";
+                    }
+                });
+            }
+
+            // 自己紹介文字数カウント
+            const bio = document.getElementById('bio');
+            const currentCount = document.getElementById('current-count');
+            const maxLength = 300;
+
+            if (bio && currentCount) {
+                bio.addEventListener('input', function () {
+                    const length = bio.value.length;
+                    currentCount.textContent = length;
+                    if (length > maxLength) {
+                        currentCount.style.color = 'red';
+                    } else {
+                        currentCount.style.color = '#888';
+                    }
+                });
+            }
+        });
+
+        document.querySelectorAll('.icon').forEach(icon => {
+            icon.addEventListener('click', () => {
+
+                // active 全解除
+                document.querySelectorAll('.icon').forEach(i => {
+                    i.classList.remove('active');
+
+                    // badge も消す
+                    const badge = i.querySelector('.badge');
+                    if (badge) badge.remove();
+                });
+
+                // active 付与
+                icon.classList.add('active');
+
+                // badge 追加
+                const badge = document.createElement('span');
+                badge.classList.add('badge');
+                icon.appendChild(badge);
+
+                // hidden に値セット
+                document.getElementById('iconValue').value = icon.dataset.value;
+            });
+        });
+    </script>
+</body>
+
+</html>

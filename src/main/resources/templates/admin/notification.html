@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個別通知送信</title>
+  <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+
+<body id="projectEdit-page">
+<div th:replace="~{layout-admin :: header}"></div>
+
+<main id="admin-main">
+  <a href="review_view.html" th:href="@{/admin/review/view(id=${review.id})}" class="icon-center review-card-sub-info text-decoration-none hover-bold">
+    <span class="material-symbols-outlined">keyboard_double_arrow_left</span>書評詳細に戻る
+  </a>
+  <h1 class="page-title">
+    <span class="material-symbols-outlined scale-bigger text-gray mr-2">mail</span>
+    個別通知送信
+  </h1>
+
+  <div class="table-border-b-strong pb-8 mt-2">
+    <div class="main-content-card p-8">
+      <div class="flex gap-1">
+        <span>テンプレート名 : </span>
+        <select id="template-select" class="select flex-1 w-full">
+          <option value="">テンプレートを選択してください</option>
+        </select>
+        <button id="load-template-btn" class="btn">呼び出す</button>
+      </div>
+
+      <div class="flex gap-1 mt-2">
+        <span>タイトル : </span>
+        <input id="input-title" type="text" class="input-text flex-1 w-full">
+      </div>
+
+      <textarea id="template-textarea" rows="7" class="input-textarea w-full mt-2"></textarea>
+
+      <p class="icon-center">置き換えタグ<span class="material-symbols-outlined text-gray cursor-help" title="個別通知送信時、自動的に各プロジェクト・書評・ユーザの情報に置換されます">help</span></p>
+      <div class="grid-4 gap-1 mt-2">
+        <button type="button" class="btn merge-tag" data-tag="{project-name}">プロジェクト名</button>
+        <button type="button" class="btn merge-tag" data-tag="{project-submissionStartAt}">書評投稿開始日時</button>
+        <button type="button" class="btn merge-tag" data-tag="{project-submissionEndAt}">書評投稿終了日時</button>
+        <button type="button" class="btn merge-tag" data-tag="{project-votingStartAt}">書評投票開始日時</button>
+        <button type="button" class="btn merge-tag" data-tag="{project-votingEndAt}">書評投票終了日時</button>
+        <button type="button" class="btn merge-tag" data-tag="{user-nickname}">ユーザーのニックネーム</button>
+        <button type="button" class="btn merge-tag" data-tag="{review-title}">書評タイトル</button>
+        <button type="button" class="btn merge-tag" data-tag="{book-title}">書籍タイトル</button>
+      </div>
+
+      <div class="flex gap-4 justify-end">
+        <p class="text-danger">宛先に間違いがないか再度ご確認ください</p>
+        <button type="button" id="confirm-button" class="btn"
+                data-modal-target="notification-confirm-modal">確認する</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <h2 class="page-title-sub">
+      <span class="material-symbols-outlined scale-bigger text-gray mr-2">send</span>
+      宛先 : 
+    </h2>
+      <div class="main-content-card p-8 mt-2"> <!-- 書評カード -->
+        <div class="table-border-b-strong pb-4"> <!-- 書評カードヘッダー -->
+          <p class="review-card-sub-info">No.<span th:text="${review.id}">0</span></p>
+          <div class="flex justify-between">
+            <h3 class="review-card-title" th:text="${review.reviewTitle}">データが取得できませんでした:書評名</h3>
+            <h3 class="review-card-title" th:text="|${review.voteCount}票|">0票</h3> <!-- 右側 -->
+          </div>
+          <p class="review-card-sub-info ml-4" th:text="|企画名 : ${review.projectName}|"></p>
+        </div>
+
+        <div class="table-border-b-strong py-4"> <!-- 書評カードボディ(上)) -->
+          <div> <!-- 右側 -->
+            <table class="w-half">
+              <tr>
+                <th>名前 : </th>
+                <td>
+                  <a href="account_view.html" th:href="@{/admin/account/view(loginId=${review.userLoginId})}">
+                    <span th:text="|${review.userNickname}(ID:${review.userLoginId})|">-----</span>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>居住地 : </th>
+                <td th:text="${review.userAddress}">-----</td>
+              </tr>
+              <tr>
+                <th>年代 : </th>
+                <td th:text="${review.userAgeGroup}">0</td>
+              </tr>
+              <tr>
+                <th>性別 : </th>
+                <td th:text="${review.userGender.label}"></td>
+              </tr>
+              </table>
+              <p class="font-bold">自己紹介 : </p>
+              <pre th:text="${review.userSelfIntroduction}">-----</pre>
+            </div>
+        </div>
+
+        <div class="table-border-b-strong py-4"> <!-- 書評カードボディ(下) -->
+          <div class="flex">
+            <table class="pr-8 mb-auto w-quarter">
+              <tr>
+                <th>ISBN : </th>
+                <td th:text="${review.bookIsbn}">-----</td>
+              </tr>
+              <tr>
+                <th>タイトル : </th>
+                <td th:text="${review.bookTitle}">-----</td>
+              </tr>
+              <tr>
+                <th>出版社 : </th>
+                <td th:text="${review.bookPublisher}">-----</td>
+              </tr>
+              <tr>
+                <th>著者 : </th>
+                <td th:text="${review.bookAuthor}">-----</td>
+              </tr>
+            </table>
+            <div class="flex-1">
+              <table>
+                <tr>
+                  <th>書評ステータス : </th>
+                  <td>
+                    <span th:if="${review.status == 'INITIAL'}">一次審査未通過</span>
+                    <span th:if="${review.status == 'FIRST_STAGE_PASSED'}">一次審査通過</span>
+                    <span th:if="${review.status == 'SECOND_STAGE_PASSED'}">ノミネート</span>
+                    <span th:if="${review.status == 'AWARDED'}">大賞</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>書評タイトル : </th>
+                  <td th:text="${review.reviewTitle}"></td>
+                </tr>
+              </table>
+              <p class="font-bold">本文 : </p>
+              <pre th:text="${review.reviewContent}"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between pt-4"> <!-- 書評カードフッター -->
+          <div> <!-- 左側 -->
+            <p class="review-card-sub-info" th:text="'投稿日時 : ' + ${#temporals.format(review.createdAt, 'yyyy/MM/dd HH:mm')}">0000/00/00 00:00</p>
+            <p class="review-card-sub-info" th:text="'更新日時 : ' + ${#temporals.format(review.updatedAt, 'yyyy/MM/dd HH:mm')}">0000/00/00 00:00</p>
+          </div>
+        </div>
+      </div>
+  </div>
+</main>
+
+<form id="notification-form" th:action="@{/admin/notification/send/{id}(id=${review.id})}" method="post" class="hidden">
+  <input type="hidden" name="title" id="hidden-title">
+  <input type="hidden" name="content" id="hidden-content">
+</form>
+
+<div id="notification-confirm-modal" class="modal">
+  <div>
+    <div class="modal-content">
+      <h2 class="page-title mx-auto">確認</h2>
+      <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+      <div class="mt-8">
+        <p>以下の内容で通知を送信してよろしいですか？</p>
+      </div>
+      <div class="mt-8">
+        <h3 class="page-title-sub">タイトル</h3>
+        <div class="notification-confirm-preview"><span id="preview-title"></span></div>
+      </div>
+      <div class="mt-8">
+        <h3 class="page-title-sub">内容</h3>
+        <pre id="notification-content" class="notification-confirm-preview" style="white-space: pre-wrap;"></pre>
+      </div>
+      <div class="btn-wrap mt-8">
+        <button type="button" class="btn" data-modal-close>キャンセル</button>
+        <button type="submit" form="notification-form" class="btn">送信する</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../../static/js/admin/admin-general.js" th:src="@{/js/admin/admin-general.js}"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const templateSelect = document.getElementById('template-select');
+    const loadBtn = document.getElementById('load-template-btn');
+    const confirmBtn = document.getElementById('confirm-button');
+
+    const inputTitle = document.getElementById('input-title');
+    const inputContent = document.getElementById('template-textarea');
+
+    const previewTitle = document.getElementById('preview-title');
+    const previewContent = document.getElementById('notification-content');
+
+    const hiddenTitle = document.getElementById('hidden-title');
+    const hiddenContent = document.getElementById('hidden-content');
+
+    // 共通：マージタグ用設定
+    const targets = [
+      "{project-name}", "{project-submissionStartAt}", "{project-submissionEndAt}",
+      "{project-votingStartAt}", "{project-votingEndAt}", "{user-nickname}",
+      "{review-title}", "{book-title}"
+    ];
+    const regex = new RegExp(targets.join('|').replace(/{/g, '\\{').replace(/}/g, '\\}'), 'g');
+
+    // --- 1. テンプレート一覧の取得 ---
+    fetch('/api/admin/notification/template/list')
+            .then(response => response.json())
+            .then(data => {
+              data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.id;
+                option.textContent = template.title;
+                templateSelect.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error fetching template list:', error));
+
+    // --- 2. テンプレート呼び出し処理 ---
+    loadBtn.addEventListener('click', () => {
+      const selectedId = templateSelect.value;
+      if (!selectedId) {
+        alert('テンプレートを選択してください');
+        return;
+      }
+
+      fetch(`/api/admin/notification/template/${selectedId}`)
+              .then(response => response.json())
+              .then(data => {
+                // 入力フィールドに反映
+                inputTitle.value = data.title || '';
+                inputContent.value = data.content || '';
+              })
+              .catch(error => {
+                console.error('Error fetching template detail:', error);
+                alert('テンプレートの取得に失敗しました');
+              });
+    });
+
+    // --- 3. モーダル反映ロジック ---
+    confirmBtn.addEventListener('click', () => {
+      const titleVal = inputTitle.value;
+      const contentVal = inputContent.value;
+
+      // プレビュー表示
+      previewTitle.textContent = titleVal || '(タイトルなし)';
+      previewContent.textContent = contentVal || '(本文なし)';
+
+      // プレビューの特定の文字列を装飾
+      const originalText = previewContent.innerHTML;
+      previewContent.innerHTML = originalText.replace(regex, (match) => {
+        return `<span class="merge-tag-preview">${match}</span>`;
+      });
+
+      // 送信用hiddenフォームへの書き込み（タグなしの純粋なテキスト）
+      hiddenTitle.value = titleVal;
+      hiddenContent.value = contentVal;
+    });
+  });
+</script>
+</body>
+
+</html>

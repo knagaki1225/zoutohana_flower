@@ -1,0 +1,148 @@
+<!-- 【書評コピー】 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評コピー</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+<body>
+    <div th:replace="~{layout-admin :: header}"></div>
+
+    <main id="admin-main">
+      <a href="review_view.html" th:href="@{/admin/review/view(id=${review.id})}" class="icon-center review-card-sub-info text-decoration-none hover-bold">
+        <span class="material-symbols-outlined">keyboard_double_arrow_left</span>書評詳細に戻る
+      </a>
+      <h1 class="page-title">
+        <span class="material-symbols-outlined scale-bigger text-gray mr-2">content_copy</span>
+        書評コピー
+      </h1>
+
+      <!-- <div class="main-content-card mt-4 mb-8 p-8">
+        <h2 class="page-title-sub icon-center toggle-title"><span class="material-symbols-outlined text-gray scale-bigger mr-2">help</span>印刷機能の使い方<span class="font-sm text-gray ml-2 toggle-text">(クリックして開く)</span></h2>
+        <div class="toggle-body">
+          <ol class="ml-8">
+            <li class="mt-2">「印刷する情報」のチェックボックスで、カードに印刷する情報を選択します。書評本文の一部を編集(例:誤字を修正)することもできます。</li>
+            <li class="mt-2">「印刷データを作成する」ボタンを押します。書評カードの印刷データがPDF形式で生成され、自動でダウンロードされます。</li>
+            <li class="mt-2">PDFを選択し、PCの印刷メニューから印刷部数を設定して印刷してください。</li>
+          </ol>
+          <ul class="ml-8 mt-8">
+            <li>印刷データには4枚分の書評カードが配置されています。A4サイズで印刷することで、1枚が文庫本と同じサイズになります。</li>
+          </ul>
+        </div>
+      </div> -->
+
+      <div class="main-content-card p-8 mt-4">
+        <h2 class="page-title-sub">コピーする情報</h2>
+        <div class="px-8 mt-4 pb-4 table-border-b-light">
+          <label>
+            <input type="checkbox" id="checkAll" class="scale-bigger mr-2">
+            すべて選択
+          </label>
+        </div>
+        <form>
+          <table class="w-full mt-4">
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザー">投稿したユーザー</label></td>
+              <td class="print-value" th:text="${review.userNickname}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザーのログインID">投稿したユーザーのログインID</label></td>
+              <td class="print-value" th:text="${review.userLoginId}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザーの性別">投稿したユーザーの性別</label></td>
+              <td class="print-value" th:text="${review.userGender.label}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザーの年代">投稿したユーザーの年代</label></td>
+              <td class="print-value" th:text="${review.userAgeGroup}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザーのID">投稿したユーザーの住所</label></td>
+              <td class="print-value" th:text="${review.userAddress}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8 pb-4 table-border-b-light"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="投稿したユーザーの自己紹介">投稿したユーザーの自己紹介</label></td>
+              <td class="print-value pb-4 table-border-b-light" th:text="${review.userSelfIntroduction}"></td>
+            </tr>
+
+            <tr>
+              <td class="pl-8 pt-4"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="企画名">企画名</label></td>
+              <td class="print-value pt-4" th:text="${review.projectName}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8 pb-4 table-border-b-light"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="企画URL">企画URL</label></td>
+              <td class="print-value pb-4 table-border-b-light" th:text="${review.projectUrlKey}"></td>
+            </tr>
+
+            <tr>
+              <td class="pl-8 pt-4"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="ISBN">ISBN</label></td>
+              <td class="print-value pt-4" th:text="${review.bookIsbn}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="書籍タイトル">書籍タイトル</label></td>
+              <td class="print-value" th:text="${review.bookTitle}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="出版社">出版社</label></td>
+              <td class="print-value" th:text="${review.bookPublisher}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="著者">著者</label></td>
+              <td class="print-value" th:text="${review.bookAuthor}"></td>
+            </tr>
+            <tr th:if="${thisReviewGenres != null and !#lists.isEmpty(thisReviewGenres)}">
+              <td class="pl-8 pb-4 table-border-b-light"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="ジャンル">ジャンル</label></td>
+              <td class="print-value pb-4 table-border-b-light">
+                <span th:each="g, stat : ${thisReviewGenres}">
+                  <span th:text="${g.name}"></span><span th:if="${!stat.last}">, </span>
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="pl-8 pt-4"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="書評ID">書評ID</label></td>
+              <td class="print-value pt-4" th:text="${review.id}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="書評タイトル">書評タイトル</label></td>
+              <td class="print-value" th:text="${review.reviewTitle}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="得票数">得票数</label></td>
+              <td class="print-value" th:text="${review.voteCount}"></td>
+            </tr>
+            <tr>
+              <td class="pl-8"><label><input type="checkbox" class="scale-bigger mr-2 print-check" data-label="ステータス">ステータス</label></td>
+              <td class="print-value">
+                <span value="INITIAL" th:if="${review.status == 'INITIAL'}">一次審査未通過</span>
+                <span value="FIRST_STAGE_PASSED" th:if="${review.status == 'FIRST_STAGE_PASSED'}">一次審査通過</span>
+                <span value="SECOND_STAGE_PASSED" th:if="${review.status == 'SECOND_STAGE_PASSED'}">ノミネート</span>
+                <span value="AWARDED" th:if="${review.status == 'AWARDED'}">大賞</span>
+              </td>
+            </tr>
+          </table>
+
+          <div class="pt-4 px-8">
+            <label>書評本文</label>
+            <p class="font-sm text-gray">必要に応じて編集することができます。編集は「リセットする」ボタンで取り消すことができます。</p>
+            <textarea rows="10" class="input-textarea w-full mt-2" th:text="${review.reviewContent}"></textarea>
+          </div>
+
+          <div class="btn-wrap mt-8">
+            <button type="reset" class="btn btn-danger">リセットする</button>
+            <button type="button" id="copyBtn" class="btn">コピーする</button>
+            <!-- <input type="submit" value="印刷データを作成する" class="btn"> -->
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <script src="../../static/js/admin/admin-general.js" th:src="@{/js/admin/admin-general.js}"></script>
+    <script src="../../static/js/admin/review-print.js" th:src="@{/js/admin/review-print.js}"></script>
+</body>
+</html>

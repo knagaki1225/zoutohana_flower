@@ -1,0 +1,81 @@
+/* ===== フォーム全体 ===== */
+.form-container {
+  background-color: var(--back-color);
+  border-radius: 30px 30px 0 0;
+  padding: 80px 16px 120px;
+  margin-top: 0;
+  text-align: center;
+}
+
+/* ===== チェック画像エリア ===== */
+.check-img-div {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* ===== 外側の円（薄い緑） ===== */
+.check-outer {
+  width: 120px;
+  height: 120px;
+  background-color: rgba(58, 143, 152, 0.2);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 内側の円（濃い緑） ===== */
+.check-inner {
+  width: 90px;
+  height: 90px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== タイトル ===== */
+.complete-title {
+  font-size: 31px;
+  font-weight: bold;
+  color: var(--font-bold);
+  margin-bottom: 16px;
+}
+
+/* ===== 下線 ===== */
+.complete-line {
+  width: 60px;
+  height: 2px;
+  background-color: #aaa;
+  margin: 0 auto 40px;
+}
+
+/* ===== 説明文 ===== */
+.complete-text {
+  font-size: 17px;
+  color: var(--font-normal);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+/* ===== ボタン ===== */
+.complete-btn {
+  display: block;
+  margin: 100px auto 0;
+  width: 90%;
+  max-width: 320px;
+  padding: 14px 0;
+  background-color: var(--main-color);
+  color: #fff;
+  text-decoration: none;
+  font-size: 22px;
+  border-radius: 8px;
+}
+
+body {
+  margin: 0;
+}

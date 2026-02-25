@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zoutohanafansite.mapper.GenreMapper">
+    <select id="getGenreList"
+            parameterType="com.example.zoutohanafansite.entity.form.GenreSearchForm"
+            resultType="com.example.zoutohanafansite.entity.genre.Genre">
+
+        SELECT *
+        FROM genres
+        WHERE deleted = false
+
+        -- キーワード検索
+        <if test="keyword != null and keyword != ''">
+            AND (
+            name LIKE CONCAT('%', #{keyword}, '%')
+            OR furigana LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        -- 並べ替え
+        <choose>
+            <when test="sort == 'createdAt_desc'">ORDER BY created_at DESC</when>
+            <when test="sort == 'createdAt_asc'">ORDER BY created_at ASC</when>
+            <when test="sort == 'updatedAt_desc'">ORDER BY updated_at DESC</when>
+            <when test="sort == 'updatedAt_asc'">ORDER BY updated_at ASC</when>
+            <when test="sort == 'name_desc'">ORDER BY name DESC</when>
+            <when test="sort == 'name_asc'">ORDER BY name ASC</when>
+            <when test="sort == 'furigana_desc'">ORDER BY furigana DESC</when>
+            <when test="sort == 'furigana_asc'">ORDER BY furigana ASC</when>
+            <otherwise>ORDER BY created_at DESC</otherwise>
+        </choose>
+    </select>
+</mapper>

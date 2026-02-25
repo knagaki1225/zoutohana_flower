@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zoutohanafansite.mapper.ReviewMapper">
+    <select id="getReviewsByUrlKey"
+            parameterType="com.example.zoutohanafansite.entity.form.ReviewSearchForm"
+            resultType="com.example.zoutohanafansite.entity.admin.review.ReviewList">
+
+        SELECT
+          r.*,
+          p.name AS project_name,
+          CASE
+            WHEN r.first_stage_passed = FALSE THEN 'INITIAL'
+            WHEN r.first_stage_passed = TRUE AND nr.id IS NULL THEN 'FIRST_STAGE_PASSED'
+            WHEN nr.id IS NOT NULL AND nr.review_awarded = FALSE THEN 'SECOND_STAGE_PASSED'
+            WHEN nr.review_awarded = TRUE THEN 'AWARDED'
+            ELSE 'UNKNOWN'
+          END AS status
+        FROM reviews r
+        JOIN projects p ON r.project_id = p.id
+        LEFT JOIN nominated_reviews nr ON r.id = nr.review_id
+        WHERE p.url_key = #{urlKey}
+          AND r.deleted = FALSE
+          AND r.draft = FALSE
+
+        -- キーワード検索
+        <if test="form.keyword != null and form.keyword != ''">
+          AND (
+            r.review_title LIKE CONCAT('%', #{form.keyword}, '%')
+            OR r.book_title LIKE CONCAT('%', #{form.keyword}, '%')
+          )
+        </if>
+
+        -- ステータス絞り込み
+        <if test="form.status != null and form.status.size() > 0">
+          AND (
+            <foreach collection="form.status" item="st" separator=" OR ">
+              <choose>
+                <when test="st == '大賞'">
+                  <![CDATA[ nr.review_awarded = TRUE ]]>
+                </when>
+                <when test="st == 'ノミネート'">
+                  <![CDATA[ nr.id IS NOT NULL AND nr.review_awarded = FALSE ]]>
+                </when>
+                <when test="st == '一次審査通過'">
+                  <![CDATA[ r.first_stage_passed = TRUE AND nr.id IS NULL ]]>
+                </when>
+                <when test="st == '一次審査未通過'">
+                  <![CDATA[ r.first_stage_passed = FALSE ]]>
+                </when>
+              </choose>
+            </foreach>
+          )
+        </if>
+
+        -- 書籍ジャンル絞り込み
+        <if test="form.genreIds != null and form.genreIds.size() > 0">
+          AND EXISTS (
+            SELECT 1
+            FROM review_genres rg
+            WHERE rg.review_id = r.id
+              AND rg.genre_id IN
+              <foreach collection="form.genreIds" item="gid" open="(" separator="," close=")">
+                #{gid}
+              </foreach>
+          )
+        </if>
+
+        -- 投稿者の性別絞り込み
+        <if test="form.userGender != null and form.userGender.size() > 0">
+          AND r.user_gender IN
+          <foreach collection="form.userGender" item="genderItem" open="(" separator="," close=")">
+            <choose>
+              <when test="'男性'.equals(genderItem)">'MALE'</when>
+              <when test="'女性'.equals(genderItem)">'FEMALE'</when>
+              <when test="'選択しない'.equals(genderItem)">'UNSPECIFIED'</when>
+            </choose>
+          </foreach>
+        </if>
+
+        -- 投稿者の年代絞り込み
+        <if test="form.userAgeGroup != null and form.userAgeGroup.size() > 0">
+          AND (
+            <foreach collection="form.userAgeGroup" item="ageItem" separator=" OR ">
+              <choose>
+                <when test="ageItem eq '9歳以下'"><![CDATA[r.user_age_group <= 9]]></when>
+                <when test="ageItem eq '10代'"><![CDATA[r.user_age_group BETWEEN 10 AND 19]]></when>
+                <when test="ageItem eq '20代'"><![CDATA[r.user_age_group BETWEEN 20 AND 29]]></when>
+                <when test="ageItem eq '30代'"><![CDATA[r.user_age_group BETWEEN 30 AND 39]]></when>
+                <when test="ageItem eq '40代'"><![CDATA[r.user_age_group BETWEEN 40 AND 49]]></when>
+                <when test="ageItem eq '50代'"><![CDATA[r.user_age_group BETWEEN 50 AND 59]]></when>
+                <when test="ageItem eq '60代'"><![CDATA[r.user_age_group BETWEEN 60 AND 69]]></when>
+                <when test="ageItem eq '70代'"><![CDATA[r.user_age_group BETWEEN 70 AND 79]]></when>
+                <when test="ageItem eq '80代'"><![CDATA[r.user_age_group BETWEEN 80 AND 89]]></when>
+                <when test="ageItem eq '90歳以上'"><![CDATA[r.user_age_group >= 90]]></when>
+              </choose>
+            </foreach>
+          )
+        </if>
+
+        -- 投稿者の居住地絞り込み
+        <if test="form.userAddress != null and form.userAddress.size() > 0">
+            AND (
+                <foreach collection="form.userAddress" item="a" separator=" OR ">
+                    <choose>
+                        <when test="a == '東北以外'">
+                            <![CDATA[
+                                (
+                                    r.user_address NOT LIKE '岩手県%' AND
+                                    r.user_address NOT LIKE '青森県%' AND
+                                    r.user_address NOT LIKE '宮城県%' AND
+                                    r.user_address NOT LIKE '秋田県%' AND
+                                    r.user_address NOT LIKE '山形県%' AND
+                                    r.user_address NOT LIKE '福島県%'
+                                )
+                            ]]>
+                        </when>
+                        <otherwise>
+                            <![CDATA[ r.user_address LIKE CONCAT(#{a}, '%') ]]>
+                        </otherwise>
+                    </choose>
+                </foreach>
+            )
+        </if>
+
+        -- 書評投稿期間絞り込み
+        <if test="form.createdStartAt != null and form.createdEndAt != null">
+            <![CDATA[AND r.created_at >= #{form.createdStartAt}]]>
+            <![CDATA[AND r.created_at <= #{form.createdEndAt}]]>
+        </if>
+
+        -- 並べ替え
+        <choose>
+            <when test="form.sort == 'created_desc'">ORDER BY r.created_at DESC</when>
+            <when test="form.sort == 'created_asc'">ORDER BY r.created_at ASC</when>
+            <when test="form.sort == 'voteCount_desc'">ORDER BY r.vote_count DESC</when>
+            <when test="form.sort == 'voteCount_asc'">ORDER BY r.vote_count ASC</when>
+            <when test="form.sort == 'status_desc'">
+                ORDER BY
+                CASE
+                    WHEN r.first_stage_passed = FALSE THEN 1
+                    WHEN r.first_stage_passed = TRUE AND nr.id IS NULL THEN 2
+                    WHEN nr.id IS NOT NULL AND nr.review_awarded = FALSE THEN 3
+                    WHEN nr.review_awarded = TRUE THEN 4
+                    ELSE 5
+                END DESC
+            </when>
+            <when test="form.sort == 'status_asc'">
+                ORDER BY
+                CASE
+                    WHEN r.first_stage_passed = FALSE THEN 1
+                    WHEN r.first_stage_passed = TRUE AND nr.id IS NULL THEN 2
+                    WHEN nr.id IS NOT NULL AND nr.review_awarded = FALSE THEN 3
+                    WHEN nr.review_awarded = TRUE THEN 4
+                    ELSE 5
+                END ASC
+            </when>
+            <otherwise>
+              ORDER BY
+              CASE
+                  WHEN r.first_stage_passed = FALSE THEN 1
+                  WHEN r.first_stage_passed = TRUE AND nr.id IS NULL THEN 2
+                  WHEN nr.id IS NOT NULL AND nr.review_awarded = FALSE THEN 3
+                  WHEN nr.review_awarded = TRUE THEN 4
+                  ELSE 5
+              END DESC
+            </otherwise>
+        </choose>
+
+    </select>
+</mapper>

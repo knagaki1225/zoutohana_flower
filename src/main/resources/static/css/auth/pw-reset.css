@@ -1,0 +1,239 @@
+body {
+  margin: 0;
+  background-color: var(--main-color);
+  color: var(--font-normal);
+}
+
+/* === ヘッダー === */
+.signup-header {
+  color: var(--text-white-color);
+  padding: 20px;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.back-link {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  color: var(--text-white-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* === ステップインジケーター === */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+  margin-top: 3rem;
+}
+
+.step {
+  text-align: center;
+  opacity: 0.6;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.step-number {
+  width: 2.5rem;
+  line-height: 38px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: var(--text-white-color);
+  font-weight: bold;
+  margin: 0 auto;
+  font-size: 1.4rem;
+}
+
+.step.active .step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--text-white-color);
+  color: var(--main-color);
+}
+
+.step-label {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  color: var(--text-white-color);
+}
+
+/* === フォームコンテナ === */
+.form-container {
+  background-color: #fffcf9;
+  border-radius: 30px 30px 0px 0px;
+  padding: 40px 25px;
+  margin-top: 2rem;
+}
+
+/* === 現在のステップタイトル === */
+.current-step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  margin-left: 1cqw;
+  padding-left: 15px;
+}
+
+.current-step-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 45%;
+  transform: translateY(-50%);
+  height: 90%;
+  /* タイトルの高さに合わせて調整 */
+  width: 5px;
+  /* 棒の太さ */
+  background-color: var(--main-color);
+  /* ユーザー指定のピンク色 */
+  border-radius: 3px;
+}
+
+.current-step-title span {
+  background-color: transparent;
+  color: var(--main-color);
+  font-size: 1.8rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.current-step-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--font-normal);
+}
+
+/* === ISBN説明ボックス === */
+.step-line-box {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+
+.step-line {
+  width: 3rem;
+  height: 1px;
+  background-color: var(--text-white-color);
+}
+
+/* === フォームグループ === */
+#signup-form {
+  background-color: white;
+  border: 2px solid #f4f4f4;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #464646;
+}
+
+.explanation {
+  padding: 5px;
+  color: var(--font-normal);
+}
+
+/* アカウントIDの注意書き */
+.form-group label span {
+  font-size: 0.6rem;
+  color: #726d6d;
+  /* 赤色 */
+  font-weight: normal;
+}
+
+/* === 入力フィールド全般 === */
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  /* paddingを含めて幅100%にする */
+  font-size: 1.3rem;
+  background-color: var(--text-white-color);
+}
+
+/* フィールドにフォーカスしたときのスタイル */
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 2px rgba(240, 98, 146, 0.2);
+}
+
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background-color: #fdecea;
+  /* 薄い赤 */
+  border-radius: 10px;
+  color: #e54848;
+  margin-top: 10px;
+}
+
+.error-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.error-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.error-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* === 検索ボタン === */
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 90%;
+  height: 50px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1.5px solid var(--sub-color);
+}
+
+.btn-next-step {
+  background-color: var(--sub-color);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 50px;
+}

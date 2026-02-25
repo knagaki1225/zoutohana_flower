@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評の詳細</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+    <link rel="stylesheet" th:href="@{/css/books/book-detail.css}" href="../../static/css/books/book-detail.css">
+</head>
+
+<body>
+
+    <div th:replace="~{layout :: header}"></div>
+    <div class="container">
+
+        <div class="breadcrumb-box">
+
+            <div style="display: flex; width: 500px;">
+                <div class="breadcrumb">ホーム</div>
+                <div class="breadcrumb-middle">></div>
+                <div class="breadcrumb">マイページ</div>
+                <div class="breadcrumb-middle">></div>
+                <div class="breadcrumb">書評の詳細</div>
+            </div>
+
+            <div th:if="${project.status.name() == 'DURING_SUBMISSION'}" class="settings-icon">
+                <div class="gear-radius">
+                    <img th:src="@{/img/gear.png}" src="../../static/img/gear.png" alt="" width="18px">
+                </div>
+            </div>
+
+        </div>
+
+
+        <section class="card">
+
+
+            <div class="review-container">
+                <!-- タイトル -->
+                <div th:text="${review.reviewTitle}" class="review-title">
+                    小学校の頃から大好きな作品！
+                </div>
+
+                <!-- 投稿日 -->
+                <div class="review-meta">
+                    投稿日：[[${#temporals.format(review.updatedAt, 'yyyy.MM.dd')}]]
+                    <span th:text="${'#'+project.name}">#文庫X 2.</span>
+                </div>
+
+                <!-- 本カード -->
+                <div class="book-card">
+                    <img th:src="'https://ndlsearch.ndl.go.jp/thumbnail/' + ${review.bookIsbn} +'.jpg'" class="book-image"></img>
+
+                    <div class="book-info">
+                        <h3 th:text="${review.bookTitle}">象と花について</h3>
+                        <div class="book-details">
+                            <p>著者名：[[${review.bookAuthor}]]</p>
+                            <p>出版社：[[${review.bookPublisher}]]</p>
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin: 30px 0;">
+
+                <!-- 書評本文 -->
+                <div class="review-text" th:text="${review.reviewContent}" style="white-space: pre-wrap;">
+                    最近の読書の中でも特に心に残った一冊でした。<br>
+                    読み進めるほど登場人物の気持ちに寄り添えるようになり、
+                    自分の日常を見つめ直すきっかけにもなりました。<br>
+                    読み終えたあとも温かい余韻が残り、しばらくその世界に浸っていたくなる作品でした。<br>
+                    読み進めるほど共感する場面が増え、自分の経験と重ね合わせながら楽しめました。
+                    静かで優しい雰囲気の中に、少しずつ変わっていく気持ちが繊細に表現されていて、
+                    読んでいて胸が温かくなる作品でした。
+                </div>
+            </div>
+        </section>
+        <div class="page-nav">
+<!--            <button class="nav-circle prev">＜</button>-->
+
+            <a th:href="@{/mypage}" href="#" class="nav-center">
+                マイページへ
+            </a>
+
+<!--            <button class="nav-circle next">＞</button>-->
+        </div>
+
+
+        <div class="settings-overlay" id="settingsModal">
+            <div class="settings-content">
+                <a th:href="@{/review/edit/{id}(id=${review.id})}" class="settings-row">
+                    <span class="settings-icon-img">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2svg14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </span>
+                    <span class="settings-text">書評編集</span>
+                    <span class="settings-arrow">&gt;</span>
+                </a>
+
+                <div class="settings-line"></div>
+
+                <a href="#" class="settings-row" id="openDeleteModal">
+                    <span class="settings-icon-img">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                    </span>
+                    <span class="settings-text">書評削除</span>
+                    <span class="settings-arrow">&gt;</span>
+                </a>
+            </div>
+        </div>
+
+
+        <!-- 削除確認モーダル -->
+        <div class="delete-overlay" id="deleteModal">
+            <div class="delete-content">
+                <h3 class="delete-title">本当に書評を削除しますか？</h3>
+                <p class="delete-text">
+                    書評を削除すると、復元することはできません。
+                </p>
+
+                <div class="delete-buttons">
+                    <button class="btn-back" id="deleteCancel">もどる</button>
+                    <form th:action="@{/review/delete/{id}(id=${review.id})}" method="post">
+                        <button class="btn-delete">削除する</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{layout :: footer}"></div>
+
+    <script th:src="@{/js/hamburger.js}"></script>
+    <script th:src="@{/js/book-detail.js}" src="../js/book-detail.js"></script>
+    <script th:src="@{/js/mypage.js}" src="../js/mypage.js"></script>
+</body>
+
+</html>

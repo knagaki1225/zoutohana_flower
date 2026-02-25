@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.zoutohanafansite.mapper.UserMapper">
+    <select id="getAllUsers"
+            parameterType="com.example.zoutohanafansite.entity.form.UserSearchForm"
+            resultType="com.example.zoutohanafansite.entity.auth.User">
+
+        SELECT
+            u.*,
+            COALESCE(r.review_count, 0) AS review_count
+        FROM users u
+        LEFT JOIN (
+            SELECT user_id, COUNT(*) AS review_count
+            FROM reviews
+            WHERE deleted = false
+                AND draft = false
+            GROUP BY user_id
+        ) r ON r.user_id = u.id
+        WHERE u.deleted = false
+
+        -- キーワード検索
+        <if test="keyword != null and keyword != ''">
+            AND (
+                u.login_id LIKE CONCAT('%', #{keyword}, '%')
+                OR u.nickname LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        -- 居住地絞り込み
+        <if test="address != null and address.size() > 0">
+            AND (
+                <foreach collection="address" item="a" separator=" OR ">
+                    <choose>
+                        <when test="a == '東北以外'">
+                            <![CDATA[
+                                (
+                                    u.address NOT LIKE '岩手県%' AND
+                                    u.address NOT LIKE '青森県%' AND
+                                    u.address NOT LIKE '宮城県%' AND
+                                    u.address NOT LIKE '秋田県%' AND
+                                    u.address NOT LIKE '山形県%' AND
+                                    u.address NOT LIKE '福島県%'
+                                )
+                            ]]>
+                        </when>
+                        <otherwise>
+                            <![CDATA[ u.address LIKE CONCAT(#{a}, '%') ]]>
+                        </otherwise>
+                    </choose>
+                </foreach>
+            )
+        </if>
+
+        -- ステータス絞り込み
+        <if test="status != null and status.size() > 0">
+            AND u.status IN
+            <foreach collection="status" item="statusItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'有効'.equals(statusItem)">'ACTIVE'</when>
+                    <when test="'停止'.equals(statusItem)">'SUSPENDED'</when>
+                    <when test="'無効'.equals(statusItem)">'BAN'</when>
+                </choose>
+            </foreach>
+        </if>
+
+        -- 性別絞り込み
+        <if test="gender != null and gender.size() > 0">
+            AND u.gender IN
+            <foreach collection="gender" item="genderItem" open="(" separator="," close=")">
+                <choose>
+                    <when test="'男性'.equals(genderItem)">'MALE'</when>
+                    <when test="'女性'.equals(genderItem)">'FEMALE'</when>
+                    <when test="'選択しない'.equals(genderItem)">'UNSPECIFIED'</when>
+                    <otherwise>'UNKNOWN'</otherwise>
+                </choose>
+            </foreach>
+        </if>
+
+        -- 年齢絞り込み
+        <if test="ageGroup != null and ageGroup.size() > 0">
+            AND (
+                <foreach collection="ageGroup" item="ageItem" separator=" OR ">
+                    <choose>
+                        <when test="ageItem eq '9歳以下'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year <= 9)]]></when>
+                        <when test="ageItem eq '10代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 10 AND 19)]]></when>
+                        <when test="ageItem eq '20代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 20 AND 29)]]></when>
+                        <when test="ageItem eq '30代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 30 AND 39)]]></when>
+                        <when test="ageItem eq '40代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 40 AND 49)]]></when>
+                        <when test="ageItem eq '50代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 50 AND 59)]]></when>
+                        <when test="ageItem eq '60代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 60 AND 69)]]></when>
+                        <when test="ageItem eq '70代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 70 AND 79)]]></when>
+                        <when test="ageItem eq '80代'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year BETWEEN 80 AND 89)]]></when>
+                        <when test="ageItem eq '90歳以上'"><![CDATA[(EXTRACT(YEAR FROM CURRENT_DATE) - u.birth_year >= 90)]]></when>
+                    </choose>
+                </foreach>
+            )
+        </if>
+
+        -- 並べ替え
+        <choose>
+            <when test="sort == 'created_desc'">ORDER BY u.created_at DESC</when>
+            <when test="sort == 'created_asc'">ORDER BY u.created_at ASC</when>
+            <when test="sort == 'loginId_asc'">ORDER BY u.login_id ASC</when>
+            <when test="sort == 'loginId_desc'">ORDER BY u.login_id DESC</when>
+            <when test="sort == 'birthYear_desc'">ORDER BY u.birth_year DESC</when>
+            <when test="sort == 'birthYear_asc'">ORDER BY u.birth_year ASC</when>
+            <when test="sort == 'reviewCount_desc'">ORDER BY review_count DESC</when>
+            <when test="sort == 'reviewCount_asc'">ORDER BY review_count ASC</when>
+            <otherwise>ORDER BY u.created_at DESC</otherwise>
+        </choose>
+
+    </select>
+</mapper>

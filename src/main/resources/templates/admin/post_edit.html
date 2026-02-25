@@ -1,0 +1,138 @@
+<!-- 【お知らせ編集・情報】 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${post.title} + ' | お知らせ編集・情報'">データが取得できませんでした:お知らせタイトル | お知らせ編集・情報</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+<body>
+    <div th:replace="~{layout-admin :: header}"></div>
+
+    <main id="admin-main">
+      <a href="post_list.html" th:href="@{/admin/post/list}" class="icon-center review-card-sub-info text-decoration-none hover-bold">
+        <span class="material-symbols-outlined">keyboard_double_arrow_left</span>お知らせ一覧に戻る
+      </a>
+      <h1 class="page-title">
+        <span class="material-symbols-outlined scale-bigger text-gray mr-2">docs</span>
+        お知らせ編集・情報
+      </h1>
+
+      <div class="main-content-card mt-4">
+        <form method="POST" th:action="@{/admin/post/view}" id="update-form" class="no-auto-submit">
+          <input type="hidden" name="id" th:value="${post.id}">
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>ステータス : </th>
+                <td>
+                  <div class="radio-wrap ml-2">
+                    <label><input type="radio" name="status" value="PUBLIC" class="scale-bigger" th:checked="${post.status.label == '公開'}" data-preview="#confirm-status">公開</label>
+                    <label><input type="radio" name="status" value="PRIVATE" class="scale-bigger" th:checked="${post.status.label == '非公開'}" data-preview="#confirm-status">非公開</label>
+                    <label><input type="radio" name="status" value="DRAFT" class="scale-bigger" th:checked="${post.status.label == '下書き'}" data-preview="#confirm-status">下書き</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="table-border-b-strong">削除 : </th>
+                <td class="table-border-b-strong">
+                  <button type="button" class="btn btn-danger" data-modal-target="delete-confirm-modal">このお知らせを削除する</button>
+                </td>
+              </tr>
+
+              <tr>
+                <th>カテゴリー : </th>
+                <td>
+                  <div class="radio-wrap ml-2">
+                    <label><input type="radio" name="category" value="PROJECT" class="scale-bigger" th:checked="${post.category.label == '企画情報'}" data-preview="#confirm-category">企画情報</label>
+                    <label><input type="radio" name="category" value="DONATION" class="scale-bigger" th:checked="${post.category.label == '寄贈情報'}" data-preview="#confirm-category">寄贈情報</label>
+                    <label><input type="radio" name="category" value="ELSE" class="scale-bigger" th:checked="${post.category.label == 'その他情報'}" data-preview="#confirm-category">その他情報</label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>タイトル : </th>
+                <td>
+                  <input type="text" name="title" class="input-text w-full" th:value="${post.title}" data-preview="#confirm-title">
+                </td>
+              </tr>
+              <tr>
+                <th>本文 : </th>
+                <td>
+                  <textarea rows="10" name="content" class="input-textarea w-full" th:text="${post.content}" data-preview="#confirm-content"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <th>投稿日時(表示される日時) : </th>
+                <td>
+                  <input type="datetime-local" name="postedAt" class="input-datetime" step="60" th:value="${#temporals.format(post.postedAt, 'yyyy-MM-dd''T''HH:mm')}" data-preview="#confirm-postedAt">
+                </td>
+              </tr>
+            </table>
+
+            <div class="btn-wrap mt-4">
+              <button type="reset" class="btn btn-danger">変更をリセットする</button>
+              <input type="button" value="確認する" class="btn" id="confirm-btn" data-modal-target="update-confirm-modal">
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <div id="delete-confirm-modal" class="modal">
+      <div>
+        <div class="modal-content">
+          <h2 class="page-title mx-auto">注意</h2>
+          <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+          <div class="mt-8">
+            <p>ステータスを非公開または下書きにすることで、利用者が閲覧できないようにすることもできます。</p>
+            <p><span class="font-bold underline text-danger">本当にこのお知らせを削除しますか？</span></p>
+          </div>
+
+          <div class="mt-8">
+            <form method="POST" th:action="@{/admin/post/delete}">
+              <input type="hidden" name="id" th:value="${post.id}">
+              <div class="btn-wrap mt-8">
+                <button type="submit" class="btn btn-danger delete-btn">削除する</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="update-confirm-modal" class="modal">
+      <div>
+        <div class="modal-content-big">
+          <h2 class="page-title text-center">確認</h2>
+          <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+          <div class="mt-8">
+            <p>以下の内容に更新してよろしいですか？</p>
+          </div>
+
+          <div class="mt-8">
+            <p class="confirm-modal-preview"><span class="font-bold">ステータス : </span><span id="confirm-status"></span></p>
+            <p class="confirm-modal-preview"><span class="font-bold">カテゴリー : </span><span id="confirm-category"></span></p>
+            <p class="confirm-modal-preview"><span class="font-bold">タイトル : </span><span id="confirm-title"></span></p>
+            <div class="confirm-modal-preview">
+              <p><span class="font-bold">本文 : </span></p>
+              <pre id="confirm-content"></pre>
+            </div>
+            <p class="confirm-modal-preview"><span class="font-bold">投稿日時(表示される日時) : </span><span id="confirm-postedAt"></span></p>
+          </div>
+
+          <div class="btn-wrap mt-8">
+            <button type="submit" form="update-form" id="final-submit-btn" class="btn">更新する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../static/js/admin/admin-general.js" th:src="@{/js/admin/admin-general.js}"></script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+/* --- 基本設定（前回と同じ） --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--back-color);
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 798px;
+  margin: 0 auto;
+  background-color: var(--back-color);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* --- パンくずリスト --- */
+.breadcrumb {
+  padding: 0.8rem 0;
+  margin-left: 1.2rem;
+  font-size: 0.7rem;
+  color: var(--font-normal);
+}
+
+.breadcrumb-middle {
+  margin-left: 1.2rem;
+  padding: 0.8rem 0;
+  font-size: 0.7rem;
+  color: var(--font-normal);
+}
+
+.breadcrumb-box {
+  display: flex;
+  margin-top: 10px;
+}
+
+/* --- カードスタイル --- */
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  color: var(--font-normal);
+}
+
+/* ▼▼▼ モーダル用CSS ▼▼▼ */
+.settings-overlay {
+  position: absolute;
+  top: 160px;
+  left: 7rem;
+  width: 17rem;
+  height: 7.5rem;
+  border-radius: 12px;
+  background: #f3f2f2;
+  z-index: 9998;
+  display: none;
+  /* ここ重要：最初は非表示 */
+  justify-content: center;
+  align-items: center;
+  border: solid 1px #e2e2e2;
+}
+
+/* activeクラスがついたら表示する */
+.settings-overlay.active {
+  display: flex;
+}
+
+/* 白い箱 */
+.settings-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 93%;
+}
+
+/* 各メニューの行 */
+.settings-row {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: var(--font-normal);
+  font-size: 11px;
+  gap: 10px;
+}
+
+.settings-row:hover {
+  background: #f9f9f9;
+}
+
+/* アイコン・文字・矢印の配置 */
+.settings-icon {
+  width: 95%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.gear-radius {
+  padding: 8px;
+  border-radius: 50%;
+  background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.settings-text {
+  flex: 1;
+  width: 70%;
+  color: var(--font-normal);
+}
+
+.settings-arrow {
+  color: #ccc;
+}
+
+/* 真ん中の線 */
+.settings-line {
+  height: 1px;
+  background: #eee;
+  margin: 0 20px;
+}
+
+.all-box {
+  padding: 0 15px;
+}
+
+/* マイページの投稿した書評 */
+.book-card-box {
+  /* display: flex; */
+  justify-content: center;
+  margin-bottom: 40px;
+  margin-top: 10px;
+}
+
+.book-card-block {
+  display: block;
+}
+
+.book-card {
+  margin: 0 auto;
+  width: 95%;
+  border-radius: 16px;
+  padding: 20px 20px;
+  border: solid 2px var(--sub-color);
+  color: var(--font-normal);
+  margin-bottom: 3rem;
+  /* 全体の文字色 */
+}
+
+/* ヘッダー部分（タイトルと票数） */
+.card-header {
+  margin-bottom: 24px;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.book-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--font-normal);
+  /* タイトルの濃いグレー */
+  margin: 0;
+  letter-spacing: 0.2rem;
+}
+
+.book-info {
+  padding-left: 20px;
+}
+
+.book-details {
+  text-align: left;
+  padding-top: 10px;
+}
+
+.vote-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--font-normal);
+}
+
+.author-name-box {
+  display: flex;
+  align-items: center;
+}
+
+.author-name {
+  padding-left: 3px;
+  font-size: 12px;
+  color: var(--font-normal);
+  margin: 0;
+}
+
+/* 本文（説明文） */
+.card-body {
+  margin-bottom: 24px;
+}
+
+.description {
+  padding-left: 1rem;
+  letter-spacing: 0.15rem;
+  font-size: 14px;
+  line-height: 1.8;
+  /* 行間を広めに */
+  color: var(--font-normal);
+  margin: 0;
+}
+
+/* フッター部分（区切り線とリンク） */
+.card-footer {
+  border-top: 1px solid #dddddd;
+  /* 薄い区切り線 */
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tag {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--main-color);
+  /* 緑色 */
+}
+
+.details-link {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--main-color);
+  /* 緑色 */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
+
+.details-link:hover {
+  opacity: 0.7;
+}
+
+/* ペジネーション */
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-btn,
+.page-number {
+  height: 35px;
+  width: 35px;
+  border: 1px solid var(--font-normal);
+  border-radius: 3px;
+  font-size: 1rem;
+  color: var(--font-normal);
+  background: white;
+  cursor: pointer;
+}
+
+.page-btn:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.page-number.active {
+  background: var(--main-color);
+  border-color: var(--main-color);
+  color: #fff;
+}
+
+.page-dots {
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  color: var(--font-normal);
+}
+
+.review-container {
+  padding: 16px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* タイトル */
+.review-title {
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--font-bold);
+  border-bottom: 2px solid var(--main-color);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+/* 投稿日 */
+.review-meta {
+  padding: 10px 0;
+  font-size: 18px;
+  color: var(--font-normal);
+  margin-bottom: 12px;
+}
+
+.review-meta span {
+  font-size: 18px;
+  color: var(--main-color);
+  margin-left: 6px;
+}
+
+/* 本カード */
+.book-card {
+  border: 1.5px solid var(--sub-color);
+  border-radius: 8px;
+  padding: 40px 20px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.book-image {
+  width: 70px;
+  height: 100px;
+  background: var(--sub-color);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.book-info h3 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  text-align: left;
+  color: var(--font-bold);
+}
+
+.book-info p {
+  margin: 0;
+  color: var(--font-normal);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.review-meta {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  justify-content: space-around;
+  padding: 20px 0;
+}
+
+/* 本文 */
+.review-text {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--font-normal);
+}
+
+/* ===== 削除モーダル 背景 ===== */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.delete-overlay.active {
+  display: flex;
+}
+
+/* ===== モーダル本体 ===== */
+.delete-content {
+  background: #fff;
+  width: 95%;
+  padding: 24px 20px;
+  border-radius: 12px;
+  text-align: center;
+  border: #c7c7c7 1px solid;
+}
+
+/* タイトル */
+.delete-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--sub-color);
+  margin-bottom: 12px;
+  width: 80%;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--gray-color);
+}
+
+/* 説明文 */
+.delete-text {
+  font-size: 16px;
+  color: var(--font-normal);
+  margin: 30px 0;
+}
+
+/* ボタン */
+.delete-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-back {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 6px;
+  border: 1px solid var(--sub-color);
+  background: #fff;
+  color: var(--sub-color);
+  font-size: 14px;
+}
+
+.btn-delete {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 6px;
+  border: none;
+  background: #1a8c8c;
+  color: #fff;
+  font-size: 14px;
+}

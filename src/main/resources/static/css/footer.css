@@ -1,0 +1,24 @@
+.footer-inside {
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 70px;
+}
+
+.footer-outside {
+  display: none;
+}
+
+/* --- タブレット以上（768px〜） --- */
+@media (min-width: 768px) {
+  .footer-inside {
+    display: none; /* フォーム内を隠す */
+  }
+
+  .footer-outside {
+    display: block; /* フォーム外を表示 */
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+  }
+}

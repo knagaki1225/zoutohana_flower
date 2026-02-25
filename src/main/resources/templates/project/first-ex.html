@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${project.name}">企画ページtop</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/project.css}" href="../../static/css/project.css">
+    <style th:inline="css">
+        :root {
+            --main-color: [(${project.themeColor.dbValue})];
+            --sub-color: [(${project.themeColor.dbValue})];
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/css/project/first-ex.css}" href="../../static/css/project/first-ex.css">
+</head>
+
+<body>
+<div th:replace="~{layout :: header}"></div>
+    <div class="container">
+
+        <div class="slider-box">
+            <div class="slider">
+                <div class="slides">
+                    <div class="slide active"><img th:src="@{/api/image/{url}(url=${project.mainImgUrl})}" src="../../static/img/book-img.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+        <section class="about-section">
+            <div class="about-wrapper">
+                <h2 class="about-title" th:text="${project.name + 'とは？'}">文庫X 2.0とは？</h2>
+                <p class="about-subtitle">ABOUT US</p>
+                <div class="about-line"></div>
+
+                <div class="about-text-box" th:text="${project.introduction}" style="white-space: pre-wrap;">
+                </div>
+            </div>
+        </section>
+
+        <div class="flow">
+            <div class="flow-situation">
+                <h2>現在</h2>
+                <p id="status-text" th:text="${project.status.getLabel()}">投稿受付前</p>
+                <h2>です</h2>
+            </div>
+            <div class="flow-text" th:if="${project.status.dbValue.equals('BEFORE_SUBMISSION')}">
+                <p th:text="${#temporals.format(project.submissionStartAt, 'yyyy年MM月dd日') + 'より書評投稿受付が始まります。'}">書評投稿受付期間になると、書評を投稿することができます。</p>
+                <p>書評投稿はさわや書店各店舗で対象の本を購入すると投稿することができます。</p>
+                <p>皆様のご参加をお待ちしております。</p>
+            </div>
+            <div class="flow-text" th:if="${project.status.dbValue.equals('DURING_SUBMISSION')}">
+                <p>現在、書評投稿受付中です。</p>
+                <p>書評投稿はさわや書店各店舗で対象の本を購入すると投稿することができます。</p>
+                <p>皆様のご参加をお待ちしております。</p>
+            </div>
+            <div class="flow-text" th:if="${project.status.dbValue.equals('FIRST_PHASE')}">
+                <p>一次審査を通過した書評は、現在第二次審査の開始前となっております。</p>
+                <p>二次審査では、読者のみなさまからの“いいね”数により最終候補となる上位10作品が決定いたします。</p>
+                <p>皆さまの一票が、作品が店頭に並ぶ大きな力となります。</p>
+                <p>投稿受付開始まで、今しばらくお待ちください。</p>
+            </div>
+            <div class="flow-text" th:if="${project.status.dbValue.equals('SECOND_PHASE_VERIFY')}">
+                <p>現在、投票結果を集計しております。</p>
+                <p>結果が確定し次第発表しますので、しばらくおまちください。</p>
+            </div>
+            <div id="info-link" th:if="${project.status.dbValue.equals('DURING_SUBMISSION')}" sec:authorize="isAuthenticated()">
+                <a th:href="@{/review(id=${project.id})}" href="new-info.html" class="btn btn-next-step" id="btn-next-step">
+                    書評の投稿をする
+                </a>
+            </div>
+        </div>
+
+        <div class="section-title-area">
+            <div class="section-square"></div>
+            <h2 class="section-title">参加の流れ</h2>
+        </div>
+
+        <section class="section-info">
+            <div class="step-book">
+                <div class="circle">
+                    <p class="circle-step">STEP</p>
+                    <p class="circle-1">01</p>
+                </div>
+                <div class="book-section-img">
+                    <img th:src="@{/img/book-giri.jpg}" src="../../static/img/book-giri.png" class="book-section" alt="">
+                </div>
+            </div>
+            <div class="step-text">
+                <h3>本を購入</h3>
+                <p>まずは、あなたが推薦したい本、または“推し本”となる作品をさわや書店で購入してください。</p>
+                <p>自分が感動した本や、ぜひ多くの人に読んでほしいと思う作品を選びましょう。</p>
+            </div>
+            <div class="triangle-box">
+                <div class="triangle"></div>
+            </div>
+        </section>
+        <section class="section-info">
+            <div class="step-book">
+                <div class="circle">
+                    <p class="circle-step">STEP</p>
+                    <p class="circle-1">02</p>
+                </div>
+                <div class="book-section-img">
+                    <img th:src="@{/img/book-qr.jpg}" src="../../static/img/book-giri.png" class="book-section" alt="">
+                </div>
+            </div>
+            <div class="step-text">
+                <h3>QRコードを読み取る</h3>
+                <p>ご購入時に、QRコード入りの紙をお渡しします。</p>
+                <p><span
+                        class="step-text-span">このQRコードがないと書評の投稿はできませんので、大切に保管してください。</span>QRコードをスマートフォンで読み取ると特設ファンサイトにアクセスできます。
+                </p>
+            </div>
+            <div class="triangle-box">
+                <div class="triangle"></div>
+            </div>
+        </section>
+        <section class="section-info">
+            <div class="step-book">
+                <div class="circle">
+                    <p class="circle-step">STEP</p>
+                    <p class="circle-1">03</p>
+                </div>
+                <div class="book-section-img">
+                    <img th:src="@{/img/book-phone.jpg}" src="../../static/img/book-giri.png" class="book-section" alt="">
+                </div>
+            </div>
+            <div class="step-text">
+                <h3>書評を投稿</h3>
+                <p>QRコードからアクセスした特設サイトであなたが推薦したい「文庫X」の書評を投稿してください。</p>
+                <p>書評では、作品の魅力やおすすめポイント自分が感動した部分などを自由に書くことができます。</p>
+                <p>あなたの思いが詰まった書評が、作品の魅力を伝える第一歩です。</p>
+            </div>
+        </section>
+        <div class="section-title-area">
+            <div class="section-square"></div>
+            <h2 class="section-title">受賞の流れ</h2>
+        </div>
+        <section>
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="Award-circle">
+                            <p class="Award-circle-step">STEP</p>
+                            <p class="Award-circle-1">01</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4>書店員による審査（一次審査）</h4>
+                        <p>投稿された書評は、書店員がチェックします。書店員の心を掴む書評であれば、一次審査通過となり、二次審査へ進むチャンスを得られます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="dashe-box">
+            <div class="dashe"></div>
+        </div>
+        <section>
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="Award-circle">
+                            <p class="Award-circle-step">STEP</p>
+                            <p class="Award-circle-1">02</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4> 一般投票（二次審査）</h4>
+                        <p>一次審査を通過した作品は、読者（一般ユーザー）による投票に進みます。「最も読みたい」と思った作品に投票してもらい、投票数の多い上位10作品が二次審査を通過します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="dashe-box">
+            <div class="dashe"></div>
+        </div>
+        <section class="Award-bottom">
+            <div class="Award-box">
+                <div class="Award">
+                    <div class="Award-circle-box">
+                        <div class="Award-circle">
+                            <p class="Award-circle-step">STEP</p>
+                            <p class="Award-circle-1">03</p>
+                        </div>
+                    </div>
+                    <div class="Award-text">
+                        <h4>販売・大賞決定</h4>
+                        <p>上位10作品は、推薦書評POP付きでさわや書店の店頭に並びます。一定期間の販売数を競い、最も売れた作品が大賞に選ばれます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div th:replace="~{layout :: contact}"></div>
+    </div>
+    <!-- フッター -->
+    <div th:replace="~{layout :: footer}"></div>
+
+    <script th:src="@{/js/hamburger.js}"></script>
+</body>

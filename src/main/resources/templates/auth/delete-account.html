@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退会手続き</title>
+
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link th:href="@{/css/main.css}" rel="stylesheet" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/auth/delete-account.css}" href="../../static/css/auth/delete-account.css">
+</head>
+
+<body>
+    <div th:replace="~{layout :: header}"></div>
+    <div class="container">
+        <div class="breadcrumb-box">
+            <div class="breadcrumb">ホーム</div>
+            <div class="breadcrumb-middle">></div>
+            <div class="breadcrumb">マイページ</div>
+            <div class="breadcrumb-middle">></div>
+            <div class="breadcrumb">退会について</div>
+        </div>
+        <h1 class="page-title">退会について</h1>
+
+        <!-- 注意事項ボックス -->
+        <div class="notice-box">
+            <!-- 注意事項セクション -->
+            <div class="notice-header">
+                <span class="notice-bar"></span>
+                <h2>退会に関する注意事項</h2>
+            </div>
+            <div class="notice-text-box">
+                <p class="notice-text">
+                    退会手続きにあたって、以下の注意事項を必ずご確認ください。
+                </p>
+            </div>
+            <div class="notice-content">
+                <ul>
+                    <li>
+                        退会手続きを行うと、登録情報（アカウントID、ニックネーム、居住地など）は<span>すべて削除されます</span>（復元することはできません）。
+                    </li>
+                    <li>
+                        退会後は、書評の編集や削除などの操作が行えなくなります。
+                    </li>
+                    <li>
+                        ただし、過去に投稿された書評が企画などで次審査で多くの投票を集めた場合、その<span>書評内容のデータが残ります</span>。
+                    </li>
+                    <li>
+                        残る書評には、個人を特定できる情報（ニックネームなど）は表示されません。
+                    </li>
+                    <li>
+                        再度ご利用いただく場合は、新規登録が必要となります。
+                    </li>
+                </ul>
+            </div>
+            <!-- ボタン -->
+
+            <div class="button-area">
+                <button th:href="@{/mypage}" class="btn-back">もどる</button>
+                <button class="btn-confirm js-open-delete-modal">確認</button>
+            </div>
+        </div>
+    </div>
+    <!-- フッター -->
+    <div th:replace="~{layout :: footer}"></div>
+
+    <!-- ヘッダーモーダル -->
+    <div class="overlay-menu" id="overlayMenu">
+        <div class="close-btn" id="menuClose">×</div>
+        <img src="../img/zoutohana-white-color.png" class="" style="width: 5rem;" alt="">
+        <ul class="menu-list">
+            <li class="menu-item">お知らせ</li>
+
+            <li class="menu-item">企画一覧</li>
+
+            <li class="menu-item">象と花プロジェクト</li>
+
+            <li class="menu-item">お問い合わせ</li>
+
+            <li class="menu-item">ログイン</li>
+        </ul>
+        <div class="imgs">
+            <img src="../img/instagram-white.png" class="imgs-icon" alt="">
+            <img src="../img/facebook-white.png" class="imgs-width" alt="">
+            <img src="../img/x-white.png" class="imgs-width" alt="">
+        </div>
+    </div>
+
+    <!-- 退会確認モーダル -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <h3 class="modal-title">退会手続きを行いますか？</h3>
+
+            <p class="modal-text">
+                これまでの書評記録やアカウント情報は全て削除され、復元することはできません。
+            </p>
+
+            <p class="modal-warning">
+                ※ 本操作を行うと、即座に退会手続きが完了します。
+            </p>
+
+            <div class="modal-buttons">
+                <button class="btn-back modal-cancel ">もどる</button>
+                <form th:action="@{/auth/leave}" method="post">
+                    <button class="btn-confirm modal-delete">退会する</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ▼▼▼ 要素を取得 ▼▼▼
+        const menuOpen = document.getElementById('menuOpen');   // ハンバーガーメニューのアイコン
+        const menuClose = document.getElementById('menuClose'); // ハンバーガーメニューの閉じるボタン
+        const overlayMenu = document.getElementById('overlayMenu'); // ハンバーガーメニュー本体
+
+        // ▼▼▼ ハンバーガーメニューの動作（既存のまま） ▼▼▼
+        menuOpen.addEventListener('click', () => {
+            overlayMenu.classList.add('active');
+        });
+
+        menuClose.addEventListener('click', () => {
+            overlayMenu.classList.remove('active');
+        });
+
+        const confirmBtn = document.querySelector('.js-open-delete-modal');
+        const deleteModal = document.getElementById('deleteModal');
+        const modalCancel = document.querySelector('.modal-cancel');
+
+        confirmBtn.addEventListener('click', () => {
+            deleteModal.classList.add('active');
+        });
+
+        modalCancel.addEventListener('click', () => {
+            deleteModal.classList.remove('active');
+        });
+
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove('active');
+            }
+        });
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,900 @@
+:root {
+  --main-color: #338895;
+  /* メインカラー*/
+  --sub-color: #338895;
+  /* サブカラー*/
+  --back-color: #fffcf9;
+  --font-normal: #535353;
+  /* 文字カラー*/
+  --font-bold: #464646;
+  /* 太字カラー*/
+  --text-white-color: #f8f8f8;
+  /* ホワイトテキストカラー*/
+  --text-shadow-color: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  /* テキストシャドウカラー*/
+  --box-shadow-color: 6px 0 12px rgba(0, 0, 0, 0.25);
+  /* ボックスシャドウカラー*/
+  --gray-color: #808080;
+}
+
+body {
+  min-width: 375px;
+  min-height: 812px;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+a {
+  font-family: "Zen Old Mincho", "游明朝", "Yu Mincho", serif;
+}
+
+/* --- ヘッダー --- */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px 5px 15px;
+  border-bottom: 1px solid #9f9f9f;
+  background-color: var(--back-color);
+}
+
+/* メールアイコン */
+.mail-icon {
+  /* 画面固定 */
+  position: fixed;
+  top: 15px;
+  right: 75px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 通知バッジ */
+.mail-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: #ff3b30; /* 赤 */
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.mail-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* ハンバーガーボタン */
+.menu-icon {
+  /* 画面固定 */
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--main-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ハンバーガーボタン */
+/* 三つの線のボックス */
+.menu-icon-box {
+  display: block;
+  align-items: center;
+  margin: 0 auto;
+  width: 50%;
+  height: 10px;
+}
+
+/* 上の部分 */
+.span-top {
+  display: block;
+  width: 25px;
+  height: 1.5px;
+  background-color: #fff;
+  margin-bottom: 4px;
+}
+
+/*  中間 */
+.span-middle {
+  display: block;
+  width: 28px;
+  height: 1.5px;
+  background-color: #fff;
+}
+
+/* 下の部分 */
+.span-bottom {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background-color: #fff;
+  margin-top: 4px;
+}
+
+/* ヘッダーのモーダル */
+.overlay-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 閉じるボタン (×) */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 40px;
+  cursor: pointer;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.imgs {
+  display: flex;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.imgs-width {
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.5rem;
+}
+
+.imgs-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 0.5rem;
+}
+
+/* メニューリスト */
+.menu-list {
+  list-style: none;
+  text-align: center;
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  margin: 10px 0;
+  font-size: 26px;
+  font-weight: normal;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+/* 白い短い横線 */
+.menu-separator {
+  width: 40px;
+  height: 2px;
+  background-color: white;
+  margin: 20px auto;
+  /* 上下の余白 */
+}
+
+.overlay-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--main-color);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  gap: 6vh;
+  /* 初期状態は非表示 */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+/* メールモーダル */
+/* 背景 */
+.mail-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.mail-modal-overlay.active {
+  display: flex;
+}
+
+/* 本体 */
+.mail-modal {
+  width: 90%;
+  padding: 0 10px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ヘッダー */
+.mail-modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  /* ← baseline */
+  position: relative;
+  padding: 30px 30px 10px 30px;
+  border-bottom: 2px solid var(--sub-color);
+  font-size: 31px;
+  font-weight: bold;
+}
+
+.mail-close {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-size: 34px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* リスト */
+.mail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.mail-list li {
+  padding: 30px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.mail-date {
+  font-size: 15px;
+  color: var(--font-normal);
+}
+
+.mail-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mail-list p {
+  margin: 4px 0 0;
+  font-size: 18px;
+  color: var(--font-normal);
+}
+
+.page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 25px 0;
+  margin: 0 auto;
+}
+
+/* 左右の丸ボタン */
+.nav-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #999;
+  background-color: var(--back-color);
+  font-size: 18px;
+  color: var(--font-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== メール詳細モーダル ===== */
+.mail-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  /* メール一覧より上 */
+}
+
+.mail-detail-overlay.active {
+  display: flex;
+}
+
+.mail-detail {
+  width: 90%;
+  max-width: 360px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.mail-detail-header {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  position: relative;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.mail-detail-close {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.mail-detail-body {
+  padding: 16px;
+}
+
+.mail-detail-date {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.mail-detail-box {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* メインタイトル */
+.main-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--font-bold);
+  margin-bottom: 20px;
+  border-bottom: 1px solid #9f9f9f;
+  line-height: 1.7;
+  padding-bottom: 8px;
+}
+
+/* 区切り線 */
+.divider {
+  border: none;
+  margin-bottom: 30px;
+}
+
+/* 日付 */
+.date {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 40px;
+}
+
+.current-sub-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  margin-left: 1px;
+  padding-left: 15px;
+}
+
+.current-sub-title :before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 35%;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 7px;
+  background-color: var(--main-color);
+  border-radius: 3px;
+}
+
+.current-sub-title h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 10px;
+  display: flex;
+  align-items: baseline;
+  color: var(--font-bold);
+}
+
+.sub-title {
+  height: 100%;
+}
+
+/* 本文テキスト */
+.content-text {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+  padding: 0 15px;
+}
+
+.page-nav-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 40px 20px;
+  margin: 0 auto;
+}
+
+/* 左右の丸ボタン */
+.nav-circle-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #999;
+  background-color: var(--back-color);
+  font-size: 18px;
+  color: var(--font-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 中央ボタン */
+.nav-center {
+  height: 44px;
+  width: 60%;
+  background-color: var(--sub-color);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+/* 参加の流れ */
+.section-info {
+  padding: 1rem;
+  background-color: white;
+}
+
+.section-square {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 3px;
+  background-color: var(--sub-color);
+  margin-right: 1rem;
+}
+
+.section-title-area {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--font-bold);
+  white-space: nowrap;
+  padding-left: 5px;
+}
+
+.seciton-green {
+  height: 2px;
+  background-color: var(--main-color);
+  width: 75%;
+  border: none;
+  border-radius: 2px;
+}
+
+.section-title-text {
+  color: var(--font-normal);
+  font-size: 15px;
+  font-weight: 100;
+  margin-left: 20px;
+}
+
+/* 円を作る */
+.circle {
+  margin-left: 8%;
+  text-align: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 100px;
+  background-color: var(--sub-color);
+  color: var(--back-color);
+  position: relative;
+  /* ← 必須！ */
+  z-index: 10;
+}
+
+.circle-step {
+  padding-top: 1rem;
+  font-size: 13px;
+}
+
+.circle-1 {
+  font-size: 30px;
+  margin-top: -0.5rem;
+}
+
+/* 参加の流れのimg部分 */
+.book-section {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-top: -30px;
+}
+
+.step-book {
+  display: block;
+}
+
+.step-text {
+  width: 95%;
+  margin: 0 auto;
+  padding: 1rem;
+  margin-bottom: 50px;
+}
+
+.step-text h3 {
+  color: var(--sub-color);
+  font-size: 1.6rem;
+  padding: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.step-text {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--font-normal);
+}
+
+.step-text-span {
+  font-weight: bold;
+}
+
+.triangle-box {
+  display: flex;
+  justify-content: center;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid transparent;
+  border-top: 1.5rem solid var(--sub-color);
+}
+
+/* 受賞 */
+.Award-box {
+  display: block;
+  width: 90%;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #e3e3e3;
+  margin: 0 auto;
+  padding-left: 1rem;
+}
+
+.Award {
+  display: flex;
+}
+
+.Award-text {
+  padding: 10px;
+}
+
+.Award-text h4 {
+  color: var(--font-normal);
+  font-size: 1.2rem;
+  padding: 20px 0px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.Award-text p {
+  color: var(--font-normal);
+  letter-spacing: 1px;
+  line-height: 2;
+}
+
+.Award-circle {
+  margin-left: 8%;
+  text-align: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1000px;
+  background-color: var(--sub-color);
+  color: var(--back-color);
+  position: relative;
+  /* ← 必須！ */
+  z-index: 10;
+}
+
+.inversion-circle {
+  margin-left: 8%;
+  text-align: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1000px;
+  border: var(--sub-color) solid 1px;
+  background-color: var(--back-color);
+  color: var(--sub-color);
+  position: relative;
+  /* ← 必須！ */
+  z-index: 10;
+}
+
+.Award-circle-step {
+  padding-top: 12px;
+  font-size: 11px;
+}
+
+.inversion-circle-step {
+  padding-top: 12px;
+  font-size: 11px;
+}
+
+.Award-circle-1 {
+  font-size: 20px;
+  margin-top: -0.5rem;
+}
+
+.inversion-circle-1 {
+  font-size: 20px;
+  margin-top: -0.5rem;
+}
+
+.Award-circle-box {
+  padding-right: 13px;
+  margin-top: 50px;
+}
+
+/* 破線 */
+.dashe {
+  width: 0;
+  height: 30px;
+  border-left: 2px dashed var(--font-normal);
+}
+
+.dashe-box {
+  display: flex;
+  justify-content: center;
+  background-color: var(--back-color);
+}
+
+.Award-bottom {
+  padding-bottom: 50px;
+}
+
+/* お問い合わせ */
+.contact-box {
+  padding: 1rem;
+  background-color: var(--back-color);
+}
+
+.contact-card {
+  background-color: #f1f0e8;
+  width: 100%;
+  padding: 30px 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  color: var(--font-normal);
+}
+
+/* タイトル「お問い合わせ」 */
+.contact-title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--font-bold);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+.contact-desc-box {
+  margin-bottom: 30px;
+}
+
+/* 説明文 */
+.contact-desc {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--font-normal);
+}
+
+/* お問い合わせフォームボタン */
+.contact-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4e4e4e;
+  color: var(--back-color);
+  text-decoration: none;
+  padding: 20px 30px;
+  border-radius: 25px;
+  margin-bottom: 25px;
+  transition: opacity 0.3s;
+}
+
+.btn-text {
+  font-size: 16px;
+  font-weight: 500;
+  flex-grow: 1;
+  text-align: center;
+  padding-left: 10px;
+  color: var(--back-color);
+}
+
+.btn-arrow {
+  font-size: 16px;
+}
+
+/* 電話番号エリア（白い箱） */
+.tel-box {
+  background-color: #ffffff;
+  border-radius: 30px;
+  padding: 25px 20px;
+  color: var(--font-normal);
+}
+
+/* 電話番号の行 */
+.tel-main {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.tel-label {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.tel-number {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* 受付時間 */
+.tel-hours {
+  font-size: 16px;
+  color: var(--font-normal);
+  margin: 0;
+}
+
+/* フッター */
+/* ===== フッター全体 ===== */
+.footer-all {
+  width: 100%;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* A BOOK PROJECT */
+.footer-top {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* A BOOK PROJECT の文字設定 */
+.footer-white-text {
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+/* フッターの背景色 */
+.footer-menu {
+  background: var(--sub-color);
+  padding: 0;
+}
+
+/* 最初のaタグメニュー */
+.footer-menu-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  border-top: 1px solid var(--back-color);
+  border-bottom: 1px solid var(--back-color);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.footer-menu-item-top p {
+  padding: 10px;
+}
+
+.footer-menu-item p {
+  padding: 10px;
+}
+
+/* 各aタグメニュー */
+.footer-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  border-bottom: 1px solid var(--back-color);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.footer-menu-item i {
+  font-size: 0.8rem;
+}
+
+
+
+.footer-line {
+  width: 80%;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 20px auto;
+}
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 0;
+}

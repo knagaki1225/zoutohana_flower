@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評投稿 | 本文</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/books/review-form.css}" href="../../static/css/books/review-form.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="signup-header">
+        <a th:href="@{/review(id=${reviewForm.projectId})}" href="" class="back-link">&lt;&nbsp;&nbsp;もどる</a>
+        <div class="step-indicator">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-label">書籍の登録</div>
+            </div>
+            <div class="step-line-box">
+                <div class="step-line"></div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">書評の入力</div>
+            </div>
+            <div class="step-line-box">
+                <div class="step-line"></div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">内容の確認</div>
+            </div>
+        </div>
+    </header>
+
+    <main th:if="${draft}">
+        <div class="form-container">
+            <div class="current-step-title">
+                <span>02</span>
+                <h2>書評の入力</h2>
+            </div>
+            <div class="info-box">
+                <p class="book-review">ここでは、読んでみて感じたことを、あなたの
+                    言葉で自由に書いてください。</p>
+                <p class="book-review">「どんな気持ちになったか」
+                    「どの場面が心に残ったか」
+                    「読み終えたあとにどんな余韻が残ったか」など、
+                    思いついたことをそのまま綴っていただいて
+                    大丈夫です。</p>
+                <p class="book-review">また、文庫Xは作品の招待を伏せたまま読書を
+                    楽しむ企画です。
+                    そのため、以下の<span class="text-bold">注意事項</span>に注意して、書評を
+                    お書きください。</p>
+                <p class="book-review">もし投稿内容が禁止事項に反している場合、
+                    一次審査の段階で掲載を見送らせていただくことがあります。</p>
+
+                <div class="forbidden-box">
+                    <div class="info-box-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>投稿時の禁止事項</h3>
+                    </div>
+                    <div style="display: block;">
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/book.png}" src="../../static/img/book.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>本のタイトルや著者名を書く</h4>
+                                <p>書名や著者名は書評に記入しないでください。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/not_people.png}" src="../../static/img/not_people.png">
+                            <div class="forbidden-text">
+                                <h4>他の人を傷つける言葉を書く</h4>
+                                <p>誹謗中傷や攻撃的な言葉遣いは避け、敬意をもって
+                                    感想を共有しましょう。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/face.png}" src="../../static/img/face.png">
+                            <div class="forbidden-text">
+                                <h4>不適切・過激な表現を使う</h4>
+                                <p>公序良俗に反する言葉や、暴力的・性的な内容は
+                                    投稿できません。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/people.png}" src="../../static/img/people.png">
+                            <div class="forbidden-text">
+                                <h4>個人情報（名前・連絡先など）を書く</h4>
+                                <p>プライバシー保護のため、ご自身や他者の個人
+                                    情報を記載しないでください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form id="signup-form" th:action="@{/review/draft/new(reviewId=${param.reviewId})}" method="post" th:object="${review}">
+                <input type="hidden" th:field="*{projectId}">
+                <input type="hidden" th:field="*{bookTitle}">
+                <input type="hidden" th:field="*{author}">
+                <input type="hidden" th:field="*{publisher}">
+                <input type="hidden" th:field="*{isbn}">
+                <div class="form-group bio-wrapper">
+                    <label for="account-id">書評タイトル<span>（タイトルは20文字以内）</span></label>
+                    <input type="text" id="account-id" name="account-id" th:field="*{reviewTitle}">
+                    <div class="char-count"><span>0</span>/20文字</div>
+                </div>
+                <div class="form-group bio-wrapper bio-bottom">
+                    <label for="bio">書評内容<span>（内容は300文字～500文字内）</span></label>
+                    <textarea id="bio" name="bio" rows="6" th:field="*{reviewContent}"></textarea>
+                    <div class="char-count"><span id="current-count">0</span>/500文字</div>
+                </div>
+                <div class="btn-shadow">
+                    <button th:formaction="@{/review/draft/update(reviewId=${param.reviewId})}" type="submit" class="btn btn-register">一時保存</button>
+                </div>
+
+                <div class="text-keep-box">
+                    <p class="text-keep">一時保存されました</p>
+                    <p class="text-keep">マイページから内容の確認や編集を続けることができます</p>
+                </div>
+                <div class="btn-review-box">
+                    <div class="btn-shadow">
+                        <button th:formaction="@{/review/draft}" type="submit" class="btn btn-register">一時保存</button>
+                    </div>
+
+                    <div class="text-keep-box">
+                        <p class="text-keep">一時保存されました</p>
+                        <p class="text-keep">マイページから内容の確認や編集を続けることができます</p>
+                    </div>
+                    <div class="btn-review-box">
+                        <div class="btn-shadow">
+                            <button type="submit" class="btn-review btn-register btn-color-right">確認へ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <footer class="footer-inside">
+                <p>&copy; 象と花プロジェクト</p>
+            </footer>
+
+        </div>
+
+        <footer class="footer-outside">
+            <p>&copy; 象と花プロジェクト</p>
+        </footer>
+
+    </main>
+
+    <main th:unless="${draft}">
+        <div class="form-container">
+            <div class="current-step-title">
+                <span>02</span>
+                <h2>書評の入力</h2>
+            </div>
+            <div class="info-box">
+                <p class="book-review">ここでは、読んでみて感じたことを、あなたの
+                    言葉で自由に書いてください。</p>
+                <p class="book-review">「どんな気持ちになったか」
+                    「どの場面が心に残ったか」
+                    「読み終えたあとにどんな余韻が残ったか」など、
+                    思いついたことをそのまま綴っていただいて
+                    大丈夫です。</p>
+                <p class="book-review">また、文庫Xは作品の招待を伏せたまま読書を
+                    楽しむ企画です。
+                    そのため、以下の<span class="text-bold">注意事項</span>に注意して、書評を
+                    お書きください。</p>
+                <p class="book-review">もし投稿内容が禁止事項に反している場合、
+                    一次審査の段階で掲載を見送らせていただくことがあります。</p>
+
+                <div class="forbidden-box">
+                    <div class="info-box-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>投稿時の禁止事項</h3>
+                    </div>
+                    <div style="display: block;">
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/book.png}" src="../../static/img/book.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>本のタイトルや著者名を書く</h4>
+                                <p>書名や著者名は書評に記入しないでください。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/not_people.png}" src="../../static/img/not_people.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>他の人を傷つける言葉を書く</h4>
+                                <p>誹謗中傷や攻撃的な言葉遣いは避け、敬意をもって
+                                    感想を共有しましょう。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/face.png}" src="../../static/img/face.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>不適切・過激な表現を使う</h4>
+                                <p>公序良俗に反する言葉や、暴力的・性的な内容は
+                                    投稿できません。</p>
+                            </div>
+                        </div>
+                        <div class="forbidden-review">
+                            <img th:src="@{/img/people.png}" src="../../static/img/people.png" alt="">
+                            <div class="forbidden-text">
+                                <h4>個人情報（名前・連絡先など）を書く</h4>
+                                <p>プライバシー保護のため、ご自身や他者の個人
+                                    情報を記載しないでください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form id="signup-form" th:action="@{/review/write}" method="post" th:object="${reviewForm}">
+                    <input type="hidden" th:field="*{projectId}">
+                    <input type="hidden" th:field="*{bookTitle}">
+                    <input type="hidden" th:field="*{author}">
+                    <input type="hidden" th:field="*{publisher}">
+                    <input type="hidden" th:field="*{isbn}">
+                    <div class="form-group bio-wrapper">
+                        <label for="account-id">書評タイトル<span>（タイトルは20文字以内）</span></label>
+                        <input type="text" id="account-id" name="account-id" th:field="*{reviewTitle}">
+                        <div class="char-count"><span>0</span>/20文字</div>
+                    </div>
+                    <div class="form-group bio-wrapper bio-bottom">
+                        <label for="bio">書評内容<span>（内容は300文字～500文字内）</span></label>
+                        <textarea id="bio" name="bio" rows="6" th:field="*{reviewContent}"></textarea>
+                        <div class="char-count"><span id="current-count">0</span>/500文字</div>
+                    </div>
+                    <div class="btn-shadow">
+                        <button th:formaction="@{/review/draft}" type="submit" class="btn btn-register">一時保存</button>
+                    </div>
+
+                    <div class="text-keep-box">
+                        <p class="text-keep">一時保存されました</p>
+                        <p class="text-keep">マイページから内容の確認や編集を続けることができます</p>
+                    </div>
+                    <div class="btn-review-box">
+                        <div class="btn-shadow">
+                            <a th:href="@{/review(id=${reviewForm.projectId})}" href="isbn-search.html"
+                                class="btn-review btn-register  btn-color-left">書籍登録へ戻る</a>
+                        </div>
+                        <div class="btn-shadow">
+                            <button type="submit" class="btn-review btn-register btn-color-right">確認へ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. 書評内容文字数カウント
+            const bio = document.getElementById('bio');
+            const currentCount = document.getElementById('current-count');
+            const maxLength = 500;
+            const minLength = 300;
+
+            if (bio && currentCount) {
+                bio.addEventListener('input', function () {
+                    const length = bio.value.length;
+                    currentCount.textContent = length;
+                    if (length > maxLength || length < minLength) {
+                        currentCount.style.color = 'red'; // 範囲外
+                    } else {
+                        currentCount.style.color = '#888'; // 範囲内
+                    }
+                });
+            }
+            // ------------------------
+            // ② 書評タイトル（1〜20文字）カウント
+            // ------------------------
+            const titleInput = document.getElementById('account-id');
+            const titleCountSpan = document.querySelector('.form-group .char-count span'); // 最初のchar-count
+
+            if (titleInput && titleCountSpan) {
+                titleInput.addEventListener('input', function () {
+                    const len = titleInput.value.length;
+
+                    titleCountSpan.textContent = len; // カウント更新
+
+                    // 1〜20文字範囲内なら灰色、範囲外なら赤
+                    if (len > 20 || len < 1) {
+                        titleCountSpan.style.color = 'red';
+                    } else {
+                        titleCountSpan.style.color = '#888';
+                    }
+                });
+            }
+
+
+            // 3. 「確認へ」ボタンの取得とクリックイベントの設定
+            // 修正ポイント: ボタンのクラスや属性から正しく要素を取得します
+            // HTMLを見ると <a href="Book-reivew.html" class="btn-review ...">確認へ</a> となっています
+            // 特定のIDがないため、querySelectorでクラス指定するか、HTMLにIDを追加するのが確実です。
+            // ここでは、HTMLを変更せずに済むよう、href属性で特定します。
+            const confirmBtn = document.querySelector('a[href="Book-reivew.html"]');
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', function (e) {
+                    e.preventDefault(); // 画面遷移を一旦停止
+
+                    // (A) 書籍情報（前のページ isbn-search.html で保存されたデータ）を取得
+                    const bookDataJson = sessionStorage.getItem('bookData');
+                    const bookData = bookDataJson ? JSON.parse(bookDataJson) : null;
+
+                    // (B) 書評フォームの各値を取得
+                    const reviewTitle = document.getElementById('account-id').value; // タイトル入力欄
+                    const reviewContent = document.getElementById('bio').value;      // 書評内容
+
+                    // (C) バリデーション（入力チェック）
+                    if (!reviewTitle.trim()) {
+                        alert('書評タイトルを入力してください。');
+                        return;
+                    }
+                    if (reviewTitle.length < 1 || reviewTitle.length > 20) {
+                        alert(`書評タイトルは1〜20文字で入力してください。（現在: ${reviewTitle.length}文字）`);
+                        return;
+                    }
+
+                    const length = reviewContent.length;
+                    if (length < 300 || length > 500) {
+                        alert(`書評内容は300文字以上500文字以内で入力してください。（現在: ${length}文字）`);
+                        return;
+                    }
+
+                    // (D) 保存するデータをまとめる
+                    const confirmationData = {
+                        // 書籍情報 (bookDataがない場合はデフォルト値)
+                        bookTitle: bookData ? bookData.title : '情報なし',
+                        bookAuthor: bookData ? bookData.author : '情報なし',
+                        bookPublisher: bookData ? bookData.publisher : '情報なし',
+                        bookCover: bookData ? bookData.coverUrl : 'https://via.placeholder.com/100x150?text=No+Image',
+
+                        // 書評情報
+                        reviewTitle: reviewTitle,
+                        reviewContent: reviewContent
+                    };
+
+                    // (E) sessionStorageに保存
+                    sessionStorage.setItem('reviewData', JSON.stringify(confirmationData));
+
+                    // (F) 確認画面へ遷移
+                    window.location.href = this.href;
+                });
+            } else {
+                console.error("「確認へ」ボタンが見つかりません。HTMLのリンク先やクラスを確認してください。");
+            }
+            // 1. sessionStorageから保存された書評データを取得
+            const reviewDataJson = sessionStorage.getItem('reviewData');
+
+            if (reviewDataJson) {
+                // データがある場合
+                const reviewData = JSON.parse(reviewDataJson);
+
+                // 【修正点】HTMLのIDに合わせて取得先を変更しました
+                const titleInput = document.getElementById('account-id'); // review-title ではなく account-id
+                const contentInput = document.getElementById('bio');      // review-content ではなく bio
+
+                if (titleInput) {
+                    titleInput.value = reviewData.reviewTitle || '';
+                    // 値を入れた後に「入力イベント」を強制的に起こして、文字数カウントを更新させる
+                    titleInput.dispatchEvent(new Event('input'));
+                }
+
+                if (contentInput) {
+                    contentInput.value = reviewData.reviewContent || '';
+                    // 値を入れた後に「入力イベント」を強制的に起こして、文字数カウントを更新させる
+                    contentInput.dispatchEvent(new Event('input'));
+                }
+            }
+        });
+
+    </script>
+    <script>
+        const title = localStorage.getItem("book_title");
+        const author = localStorage.getItem("book_author");
+        const publisher = localStorage.getItem("book_publisher");
+        const cover = localStorage.getItem("book_cover");
+
+        // もし値が取得できたら反映
+        if (title && author && publisher) {
+            document.getElementById("disp-title").textContent = title;
+            document.getElementById("disp-author").textContent = author;
+            document.getElementById("disp-publisher").textContent = publisher;
+            document.getElementById("disp-cover").src = cover;
+        }
+
+    </script>
+
+</body>

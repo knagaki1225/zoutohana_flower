@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評投稿 | ISBN</title>
+    <link rel="stylesheet" th:href="@{/css/books/isbn-search.css}" href="../../static/css/books/isbn-search.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="signup-header">
+        <a th:href="@{/login(id=${param.id})}" href="#" class="back-link">&lt;&nbsp;&nbsp;もどる</a>
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">書籍の登録</div>
+            </div>
+            <div class="step-line-box">
+                <div class="step-line"></div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">書評の入力</div>
+            </div>
+            <div class="step-line-box">
+                <div class="step-line"></div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">内容の確認</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <div class="current-step-title">
+                <span>01</span>
+                <h2>書籍の登録</h2>
+            </div>
+            <div class="info-box">
+                <div class="info-box-title">
+                    <i class="fas fa-book-open"></i>
+                    <h3>ISBNコードとは？</h3>
+                </div>
+                <p><span class="text-bold">ISBNコード</span>とは、本を特定するための13ケタの番号です。また、本の裏表紙には、通常二つのバーコードが印字されています。</p>
+                <p>そのうち、上のバーコードが「ISBNコード」でスマートフォンのカメラを使ってバーコードを読み取ると、自動で本の情報を取得することができます。</p>
+                <p>もし、バーコードがうまく読み取れない場合は、本の裏表紙にある「ISBN」から始まる13ケタの数字を直接入力してください。</p>
+
+                <div class="search-section">
+                    <h4>バーコードから検索</h4>
+                    <div class="barcode-scanner-area">
+                        <div class="scanner-corner top-left"></div>
+                        <div class="scanner-corner top-right"></div>
+                        <i class="fas fa-barcode barcode-icon"></i>
+                        <div class="scanner-corner bottom-left"></div>
+                        <div class="scanner-corner bottom-right"></div>
+                    </div>
+                    <p class="scan-note">タップしてカメラ起動</p>
+                </div>
+                <div class="divider">
+                    <span>または</span>
+                </div>
+                <div class="search-section">
+                    <h4>入力して検索</h4>
+                    <div class="form-group">
+                        <input type="text" id="isbn-input" name="isbn-input" placeholder="例）000-00-00000-000">
+                    </div>
+                    <button type="button" class="btn btn-search" id="searchBtn">入力内容で検索</button>
+                </div>
+
+                <div class="book-result-area" id="search-result-section" style="display: none;">
+                    <h2 class="book-title" id="result-title">（タイトル）</h2>
+                    <div class="book-info-wrapper">
+                        <img src="" alt="書影" class="book-cover" id="result-cover">
+                        <div class="book-details">
+                            <div class="detail-item">
+                                <label>著者</label>
+                                <p id="result-author">（著者）</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>出版社</label>
+                                <p id="result-publisher">（出版社）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form th:action="@{/review}" method="post" th:object="${isbnForm}" id="review-form">
+                        <input type="hidden" th:field="*{projectId}" id="form-projectId" th:value="${param.id}">
+
+                        <input type="hidden" th:field="*{title}" id="form-title">
+                        <input type="hidden" th:field="*{author}" id="form-author">
+                        <input type="hidden" th:field="*{publisher}" id="form-publisher">
+                        <input type="hidden" th:field="*{isbn}" id="form-isbn">
+
+                        <button type="submit" class="btn btn-next-step" id="btn-next-step">
+                            この本の書評を書く
+                        </button>
+                    </form>
+
+                </div>
+
+                <div class="not-found-area" id="not-found-area" style="display: none;">
+                    <div class="not-found">
+                        <h2>本が見つかりませんでした</h2>
+                        <p>入力したISBNコードに該当する本の情報が見つかりません</p>
+                        <ul>
+                            <li>番号が正しいかもう一度ご確認ください。</li>
+                            <li>古い本や海外の本は登録されていない場合があります。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer-outside">
+            <p>&copy; 象と花プロジェクト</p>
+        </footer>
+
+    </main>
+
+
+    <div class="scanner-modal" id="scanner-modal">
+        <div class="scanner-content">
+            <div id="scanner-viewport"></div>
+            <button id="scanner-close-btn">キャンセル</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+        const notFoundArea = document.getElementById('not-found-area');
+        const scanArea = document.querySelector('.barcode-scanner-area');
+        const scanCloseBtn = document.getElementById('scanner-close-btn');
+
+        /**
+         * 取得した書籍情報を画面とフォームの両方にセットする共通関数
+         */
+        function updateFormAndDisplay(title, author, publisher, isbn) {
+            // 画面表示用 (textContent)
+            document.getElementById("result-title").textContent = title || "情報なし";
+            document.getElementById("result-author").textContent = author || "情報なし";
+            document.getElementById("result-publisher").textContent = publisher || "情報なし";
+
+            // フォーム送信座用 (value)
+            document.getElementById("form-title").value = title || "";
+            document.getElementById("form-author").value = author || "";
+            document.getElementById("form-publisher").value = publisher || "";
+            document.getElementById("form-isbn").value = isbn || "";
+        }
+
+        /**
+         * 書影取得
+         */
+        function setCoverImage(isbn) {
+            const cleanIsbn = isbn.replace(/-/g, "");
+            const url = `https://ndlsearch.ndl.go.jp/thumbnail/${cleanIsbn}.jpg`;
+            const img = document.getElementById("result-cover");
+
+            img.onerror = function () {
+                this.src = "https://via.placeholder.com/100x150?text=No+Image";
+                this.onerror = null;
+            };
+            img.src = url;
+        }
+
+        /**
+         * 国立国会図書館APIから情報を取得するメイン関数
+         */
+        async function fetchBookInfo(isbn) {
+            if (!isbn) return;
+
+            // 状態のリセット
+            notFoundArea.style.display = "none";
+            setCoverImage(isbn);
+            document.getElementById("search-result-section").style.display = "block";
+            updateFormAndDisplay("検索中...", "検索中...", "検索中...", isbn);
+
+            const url = `https://ndlsearch.ndl.go.jp/api/opensearch?isbn=${isbn}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("通信エラー");
+
+                const xmlText = await response.text();
+                const xml = new DOMParser().parseFromString(xmlText, "text/xml");
+                const item = xml.querySelector("item");
+
+                if (!item) {
+                    notFoundArea.style.display = "block";
+                    document.getElementById("search-result-section").style.display = "none";
+                    notFoundArea.scrollIntoView({ behavior: "smooth", block: "start" });
+                    return;
+                }
+
+                // タイトル取得
+                const title = item.querySelector("title") ? item.querySelector("title").textContent : "";
+
+                // 著者取得
+                const authorNode = item.getElementsByTagName("dc:creator")[0] || item.getElementsByTagName("dcndl:creator")[0];
+                let author = authorNode ? authorNode.textContent : "";
+                if (author && author.includes(",")) {
+                    const parts = author.split(",");
+                    author = parts.slice(0, parts.length - 1).join("").trim();
+                }
+
+                // 出版社取得
+                const publisher = xml.evaluate(
+                    "string(//item/dc:publisher | //item/dcndl:publisher)",
+                    xml,
+                    (prefix) => {
+                        if (prefix === "dc") return "http://purl.org/dc/elements/1.1/";
+                        if (prefix === "dcndl") return "http://ndl.go.jp/dcndl/terms/";
+                        return null;
+                    },
+                    XPathResult.STRING_TYPE,
+                    null
+                ).stringValue;
+
+                // 画面とフォームを更新
+                updateFormAndDisplay(title, author, publisher, isbn);
+
+                document.getElementById("search-result-section").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            } catch (error) {
+                console.error(error);
+                notFoundArea.style.display = "block";
+                document.getElementById("search-result-section").style.display = "none";
+            }
+        }
+
+        // --- イベントリスナー ---
+
+        // 手入力検索ボタン
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const isbn = document.getElementById("isbn-input").value.trim();
+            if (!isbn) {
+                alert("ISBN を入力してください");
+                return;
+            }
+            fetchBookInfo(isbn);
+        });
+
+        // スキャナ起動ボタン
+        if (scanArea) {
+            scanArea.addEventListener('click', function () {
+                const isSecureContext = window.location.protocol === 'https:' ||
+                    window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1';
+                if (!isSecureContext) {
+                    alert('カメラ機能は HTTPS 接続時のみ利用可能です。');
+                    return;
+                }
+                startScanner();
+            });
+        }
+
+        // スキャナキャンセル
+        if (scanCloseBtn) {
+            scanCloseBtn.addEventListener('click', stopScanner);
+        }
+
+        // --- Quagga (スキャナ) 関連 ---
+
+        function startScanner() {
+            const scannerModal = document.getElementById('scanner-modal');
+            scannerModal.style.display = 'flex';
+
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner-viewport'),
+                    constraints: { width: 640, height: 480, facingMode: "environment" },
+                },
+                frequency: 10,
+                decoder: { readers: ["ean_reader"] },
+            }, function (err) {
+                if (err) {
+                    alert("カメラの起動に失敗しました。");
+                    stopScanner();
+                    return;
+                }
+                Quagga.start();
+            });
+        }
+
+        function stopScanner() {
+            if (typeof Quagga !== 'undefined') { Quagga.stop(); }
+            document.getElementById('scanner-modal').style.display = 'none';
+        }
+
+        Quagga.onDetected(function (result) {
+            const code = result.codeResult.code;
+            if (code.length === 13 && (code.startsWith('978') || code.startsWith('979'))) {
+                document.getElementById("isbn-input").value = code;
+                stopScanner();
+                fetchBookInfo(code);
+            }
+        });
+    </script>
+</body>
+
+</html>

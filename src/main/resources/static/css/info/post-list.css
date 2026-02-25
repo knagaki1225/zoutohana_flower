@@ -1,0 +1,275 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--back-color);
+  line-height: 1.7;
+}
+
+.container {
+  max-width: 798px;
+  margin: 0 auto;
+  background-color: var(--back-color);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* --- パンくずリスト --- */
+.breadcrumb {
+  padding: 0.8rem 0;
+  margin-left: 1.2rem;
+  font-size: 0.7rem;
+  color: var(--font-normal);
+}
+
+.breadcrumb-middle {
+  margin-left: 1.2rem;
+  padding: 0.8rem 0;
+  font-size: 0.7rem;
+  color: var(--font-normal);
+}
+
+.breadcrumb-box {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+/* News 新着情報 */
+.list-box {
+  padding: 1rem 3rem;
+  color: var(--font-normal);
+}
+
+.list-title {
+  font-size: 1.5rem;
+}
+
+.list-border {
+  border: 1.5px solid var(--main-color);
+  width: 50%;
+}
+
+.list-box p {
+  padding: 5px 0;
+}
+
+/* 情報一覧 */
+.news-block {
+  background-color: white;
+  padding: 10px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 検索 */
+.search_container {
+  box-sizing: border-box;
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  color: var(--font-normal);
+}
+
+/* 虫眼鏡アイコン（SVG）のスタイル */
+.search_icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  stroke: var(--sub-color);
+  pointer-events: none;
+}
+
+/* 入力フィールドのスタイル */
+.search_container input[type="text"] {
+  width: 100%;
+  border: 1px solid var(--sub-color);
+  padding: 15px 15px 15px 45px;
+  border-radius: 50px;
+  outline: none;
+  box-sizing: border-box;
+  color: inherit;
+  font-size: 16px;
+  background: transparent;
+}
+
+/* プレースホルダーの色設定 */
+.search_container input::placeholder {
+  color: var(--sub-color);
+  opacity: 0.7;
+}
+
+/* タブ */
+.tab-box {
+  margin: 50px 0;
+}
+
+.tab-menu {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 各タブアイテム */
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  color: #acacac;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ドット（丸）の作成 */
+.tab-item::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+.tab-item.active {
+  color: var(--font-normal);
+}
+
+.tab-item.active::after {
+  background-color: var(--main-color);
+}
+
+.tab-menu a {
+  text-decoration: none;
+}
+
+/* ニュース */
+.news-list {
+  margin-top: 20px;
+  width: 85%;
+  /* 必要に応じて調整してください */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.news-item + .news-item {
+  border-top: none;
+}
+
+.news-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  /* リンクの下線を消す */
+  padding: 20px 0;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  border-collapse: collapse;
+  color: inherit;
+  transition: background-color 0.3s;
+}
+
+/* 記事の中身（左側） */
+.news-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* 日付とタグの行 */
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  /* 日付とタグの間隔 */
+  font-size: 14px;
+}
+
+.news-box {
+  width: 100%;
+  display: block;
+  justify-content: space-between;
+  background-color: white;
+  padding: 50px 0;
+  margin-bottom: 26px;
+}
+
+.news-date {
+  color: var(--font-normal);
+  /* 日付の色 */
+}
+
+.news-tag {
+  color: var(--main-color);
+  font-weight: normal;
+}
+
+/* タイトルテキスト */
+.news-title {
+  display: flex;
+  align-items: end;
+  margin: 0;
+  font-size: 16px;
+  color: var(--font-normal);
+  font-weight: normal;
+}
+
+/* 右側の矢印 */
+.news-arrow {
+  font-size: var(--back-color);
+  color: #a5a5a5;
+  font-size: 18px;
+  margin-left: 10px;
+  font-family: sans-serif;
+}
+
+/* ペジネーション */
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.page-btn,
+.page-number {
+  height: 35px;
+  width: 35px;
+  border: 1px solid var(--font-normal);
+  border-radius: 3px;
+  font-size: 1rem;
+  color: var(--font-normal);
+  background: white;
+  cursor: pointer;
+}
+
+.page-btn:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.page-number.active {
+  background: var(--main-color);
+  border-color: var(--main-color);
+  color: #fff;
+}
+
+.page-dots {
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  color: var(--font-normal);
+}

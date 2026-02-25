@@ -1,0 +1,320 @@
+<!-- 【書評一覧】 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${project.name} + ' | 書評一覧'">データが取得できませんでした:企画名 | 書評一覧</title>
+  <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+<body>
+  <div th:replace="~{layout-admin :: header}"></div>
+
+  <main id="admin-main">
+    <a href="project_edit.html" th:href="@{/admin/project/view(urlKey=${project.urlKey})}" class="icon-center review-card-sub-info text-decoration-none hover-bold">
+      <span class="material-symbols-outlined">keyboard_double_arrow_left</span>企画情報に戻る
+    </a>
+    <h1 class="page-title">
+      <span class="material-symbols-outlined scale-bigger text-gray mr-2">note_stack</span>
+      書評一覧
+      <span class="page-title-count" th:text="'(' + ${reviews.size()} + '件)'">(0件)</span>
+    </h1>
+
+    <div class="main-content">
+      <h1 class="page-title-sub">
+        <span class="text-gray">企画 : </span>
+        <span th:text="${project.name}">データが取得できませんでした:企画名</span>
+      </h1>
+      <div class="flex justify-between mt-2"> <!-- テーブルの上のメニュー部分 -->
+        <div class="flex gap-1"> <!-- メニュー左部分(並び替え) -->
+          <form method="GET" th:action="@{/admin/review/list(urlKey=${project.urlKey})}">
+            <input type="hidden" name="urlKey" th:value="${project.urlKey}">
+            <input type="hidden" name="keyword" th:value="${form.keyword}">
+            <th:block th:each="s : ${form.status}">
+                <input type="hidden" name="status" th:value="${s}">
+            </th:block>
+            <th:block th:each="gid : ${form.genreIds}">
+              <input type="hidden" name="genreIds" th:value="${gid}">
+            </th:block>
+            <th:block th:each="g : ${form.userGender}">
+                <input type="hidden" name="userGender" th:value="${g}">
+            </th:block>
+            <th:block th:each="a : ${form.userAgeGroup}">
+                <input type="hidden" name="userAgeGroup" th:value="${a}">
+            </th:block>
+            <th:block th:each="addr : ${form.userAddress}">
+                <input type="hidden" name="userAddress" th:value="${addr}">
+            </th:block>
+            <input type="hidden" name="createdStartAt" th:value="${form.createdStartAt}">
+            <input type="hidden" name="createdEndAt" th:value="${form.createdEndAt}">
+            <select name="sort" class="select">
+                <option value="status_desc" th:selected="${form.sort == 'status_desc'}">ステータス(大賞→一次審査未通過)</option>
+                <option value="status_asc" th:selected="${form.sort == 'status_asc'}">ステータス(一次審査未通過→大賞)</option>
+                <option value="voteCount_desc" th:selected="${form.sort == 'voteCount_desc'}">得票数(多→少)</option>
+                <option value="voteCount_asc" th:selected="${form.sort == 'voteCount_asc'}">得票数(少→多)</option>
+                <option value="created_desc" th:selected="${form.sort == 'created_desc'}">作成日時(新→旧)</option>
+                <option value="created_asc"  th:selected="${form.sort == 'created_asc'}">作成日時(旧→新)</option>
+            </select>
+          </form>
+          順
+        </div>
+        <div class="flex gap-1"> <!-- メニュー右部分(絞り込み・検索) -->
+          <div class="filter-btn-container">
+              <button type="button" class="btn filter-btn-wrap" id="filter-btn" data-modal-target="filter-option-modal">
+                  絞り込みオプション
+              </button>
+              <a th:href="@{/admin/review/list(urlKey=${project.urlKey}, keyword=${form.keyword}, sort=${form.sort})}"
+                  class="clear-filter-icon material-symbols-outlined"
+                  onclick="event.stopPropagation();">
+                  <span class="material-symbols-outlined">close</span>
+              </a>
+          </div>
+          <form method="GET" th:action="@{/admin/review/list(urlKey=${project.urlKey})}" class="flex gap-1">
+              <input type="hidden" name="urlKey" th:value="${project.urlKey}">
+              <input type="hidden" name="sort" th:value="${form.sort}">
+              <th:block th:each="s : ${form.status}">
+                  <input type="hidden" name="status" th:value="${s}">
+              </th:block>
+              <th:block th:each="gid : ${form.genreIds}">
+                <input type="hidden" name="genreIds" th:value="${gid}">
+              </th:block>
+              <th:block th:each="g : ${form.userGender}">
+                  <input type="hidden" name="userGender" th:value="${g}">
+              </th:block>
+              <th:block th:each="a : ${form.userAgeGroup}">
+                  <input type="hidden" name="userAgeGroup" th:value="${a}">
+              </th:block>
+              <th:block th:each="addr : ${form.userAddress}">
+                  <input type="hidden" name="userAddress" th:value="${addr}">
+              </th:block>
+              <input type="search" name="keyword" class="input-text" placeholder="書評タイトルまたは書籍タイトルで検索" th:value="${form.keyword}">
+              <button type="submit" class="btn"><span class="material-symbols-outlined scale-bigger mt-2">search</span></button>
+            </form>
+        </div>
+      </div>
+
+      <form method="POST" th:action="@{/admin/review/statusUpdate}" id="statusUpdateForm" class="no-auto-submit">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input type="hidden" name="urlKey" th:value="${project.urlKey}">
+        <input type="hidden" name="keyword" th:value="${form.keyword}">
+        <input type="hidden" name="sort" th:value="${form.sort}">
+        <th:block th:each="s : ${form.status}">
+          <input type="hidden" name="status" th:value="${s}">
+        </th:block>
+        <th:block th:each="gid : ${form.genreIds}">
+          <input type="hidden" name="genreIds" th:value="${gid}">
+        </th:block>
+        <th:block th:each="g : ${form.userGender}">
+          <input type="hidden" name="userGender" th:value="${g}">
+        </th:block>
+        <th:block th:each="a : ${form.userAgeGroup}">
+          <input type="hidden" name="userAgeGroup" th:value="${a}">
+        </th:block>
+        <th:block th:each="addr : ${form.userAddress}">
+          <input type="hidden" name="userAddress" th:value="${addr}">
+        </th:block>
+        <input type="hidden" name="createdStartAt" th:value="${form.createdStartAt}">
+        <input type="hidden" name="createdEndAt" th:value="${form.createdEndAt}">
+
+        <div class="flex gap-1 mt-2">
+          <span>チェックしたもの</span>
+          <div class="flex-1">
+            <select name="targetStatus" id="statusSelect" class="select w-full">
+              <option value="INITIAL">のステータスを「一次審査未通過」にする</option>
+              <option value="FIRST_STAGE_PASSED">のステータスを「一次審査通過」にする</option>
+              <option value="SECOND_STAGE_PASSED">のステータスを「ノミネート」にする</option>
+              <option value="AWARDED">のステータスを「大賞」にする</option>
+            </select>
+          </div>
+          <button type="button" class="btn" data-modal-target="change-confirm-modal">確認</button>
+        </div>
+
+        <table class="list-table mt-4">
+          <tr>
+            <th><input type="checkbox" id="checkAllReviews" class="scale-bigger"></th>
+            <th class="table-border-r">ID</th>
+            <th>ステータス</th>
+            <th class="table-border-r">得票数</th>
+            <th>書評タイトル</th>
+            <th>書籍タイトル</th>
+            <th>投稿者</th>
+            <th>投稿日時</th>
+            <th></th>
+          </tr>
+          <tr th:if="${#lists.isEmpty(reviews)}">
+            <td colspan="9" class="text-center">
+              該当する書評はありませんでした
+            </td>
+          </tr>
+          <tr class="table-content-tr" th:each="review : ${reviews}">
+            <td class="text-center">
+              <input type="checkbox"
+                    name="reviewIds"
+                    th:value="${review.id}"
+                    th:data-title="${review.reviewTitle}"
+                    th:data-book="${review.bookTitle}"
+                    class="review-checkbox scale-bigger">
+            </td>
+            <td th:text="${review.id}" class="table-border-r text-right">-----</td>
+            <td class="text-center">
+              <span th:if="${review.status == 'INITIAL'}">一次審査未通過</span>
+              <span th:if="${review.status == 'FIRST_STAGE_PASSED'}">一次審査通過</span>
+              <span th:if="${review.status == 'SECOND_STAGE_PASSED'}">ノミネート</span>
+              <span th:if="${review.status == 'AWARDED'}">大賞</span>
+            </td>
+            <td th:text="${review.voteCount}" class="table-border-r text-right">0</td>
+            <td th:text="${review.reviewTitle}">書評タイトルが読み込めませんでした</td>
+            <td th:text="${review.bookTitle}">書籍タイトルが読み込めませんでした</td>
+            <td th:text="${review.userNickname}">投稿者名が読み込めませんでした</td>
+            <td th:text="${#temporals.format(review.createdAt, 'yyyy/MM/dd HH:mm')}" class="text-center">0000/00/00 00:00</td>
+            <td class="text-center">
+              <a href="review_view.html" th:href="@{/admin/review/view(id=${review.id})}" class="table-row-link">
+                  <span class="material-symbols-outlined">keyboard_double_arrow_right</span>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </form>
+
+    </div>
+  </main>
+
+  <div id="filter-option-modal" class="modal">
+    <div>
+      <div class="modal-content">
+        <h2 class="page-title-sub">絞り込みオプション</h2>
+        <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+        <form method="GET" th:action="@{/admin/review/list(urlKey=${project.urlKey})}">
+          <input type="hidden" name="urlKey" th:value="${project.urlKey}">
+          <input type="hidden" name="keyword" th:value="${form.keyword}">
+          <input type="hidden" name="sort" th:value="${form.sort}">
+
+          <ul class="modal-option-wrap mt-4 ml-4">
+            <li>
+              <label><input type="checkbox" class="modal-checkbox-parent">ステータス</label>
+              <ul class="modal-checkbox-child grid-5">
+                <li><label><input type="checkbox" name="status" value="大賞" th:checked="${form.status != null and form.status.contains('大賞')}">大賞</label></li>
+                <li><label><input type="checkbox" name="status" value="ノミネート" th:checked="${form.status != null and form.status.contains('ノミネート')}">ノミネート</label></li>
+                <li><label><input type="checkbox" name="status" value="一次審査通過" th:checked="${form.status != null and form.status.contains('一次審査通過')}">一次審査通過</label></li>
+                <li><label><input type="checkbox" name="status" value="一次審査未通過" th:checked="${form.status != null and form.status.contains('一次審査未通過')}">一次審査未通過</label></li>
+              </ul>
+            </li>
+            <li>
+              <label><input type="checkbox" class="modal-checkbox-parent">書籍ジャンル</label>
+              <ul class="modal-checkbox-child grid-5">
+                <li th:each="g : ${genres}">
+                  <label>
+                    <input type="checkbox"
+                          name="genreIds"
+                          th:value="${g.id}"
+                          th:checked="${form.genreIds != null and form.genreIds.contains(g.id)}">
+                    <span th:text="${g.name}">ジャンル名</span>
+                  </label>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <label><input type="checkbox" class="modal-checkbox-parent">投稿者の性別</label>
+              <ul class="modal-checkbox-child grid-5">
+                <li><label><input type="checkbox" name="userGender" value="男性" th:checked="${form.userGender != null and form.userGender.contains('男性')}">男性</label></li>
+                <li><label><input type="checkbox" name="userGender" value="女性" th:checked="${form.userGender != null and form.userGender.contains('女性')}">女性</label></li>
+                <li><label><input type="checkbox" name="userGender" value="選択しない" th:checked="${form.userGender != null and form.userGender.contains('選択しない')}">選択しない</label></li>
+              </ul>
+            </li>
+            <li>
+                <label><input type="checkbox" class="modal-checkbox-parent">投稿者の年代</label>
+                <ul class="modal-checkbox-child grid-5">
+                    <li><label><input type="checkbox" name="userAgeGroup" value="9歳以下" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('9歳以下')}">~9歳</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="10代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('10代')}">10代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="20代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('20代')}">20代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="30代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('30代')}">30代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="40代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('40代')}">40代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="50代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('50代')}">50代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="60代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('60代')}">60代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="70代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('70代')}">70代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="80代" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('80代')}">80代</label></li>
+                    <li><label><input type="checkbox" name="userAgeGroup" value="90歳以上" th:checked="${form.userAgeGroup != null and form.userAgeGroup.contains('90歳以上')}">90歳~</label></li>
+                </ul>
+            </li>
+            <li>
+              <label><input type="checkbox" class="modal-checkbox-parent">投稿者の居住地</label>
+              <ul class="modal-checkbox-child">
+                <li><label><input type="checkbox" name="userAddress" value="岩手県" th:checked="${form.userAddress != null and form.userAddress.contains('岩手県')}">岩手県</label></li>
+                <li>
+                  <label><input type="checkbox" class="modal-checkbox-parent">東北(岩手県以外)</label>
+                  <ul class="modal-checkbox-child grid-5">
+                    <li><label><input type="checkbox" name="userAddress" value="青森県" th:checked="${form.userAddress != null and form.userAddress.contains('青森県')}">青森県</label></li>
+                    <li><label><input type="checkbox" name="userAddress" value="宮城県" th:checked="${form.userAddress != null and form.userAddress.contains('宮城県')}">宮城県</label></li>
+                    <li><label><input type="checkbox" name="userAddress" value="秋田県" th:checked="${form.userAddress != null and form.userAddress.contains('秋田県')}">秋田県</label></li>
+                    <li><label><input type="checkbox" name="userAddress" value="山形県" th:checked="${form.userAddress != null and form.userAddress.contains('山形県')}">山形県</label></li>
+                    <li><label><input type="checkbox" name="userAddress" value="福島県" th:checked="${form.userAddress != null and form.userAddress.contains('福島県')}">福島県</label></li>
+                  </ul>
+                </li>
+                <li><label><input type="checkbox" name="userAddress" value="東北以外" th:checked="${form.userAddress != null and form.userAddress.contains('東北以外')}">東北以外</label></li>
+              </ul>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox"
+                    class="modal-checkbox-parent period-check"
+                    data-start="createdStartAt"
+                    data-end="createdEndAt"
+                    th:checked="${form.createdStartAt != null and form.createdEndAt != null}">
+                書評投稿日時
+              </label>
+              <div class="w-full ml-6">
+                <input type="datetime-local"
+                    name="createdStartAt"
+                    th:value="${form.createdStartAt}"
+                    id="createdStartAt"
+                    class="input-datetime">
+                ~
+                <input type="datetime-local"
+                    name="createdEndAt"
+                    th:value="${form.createdEndAt}"
+                    id="createdEndAt"
+                    class="input-datetime">
+              </div>
+            </li>
+          </ul>
+
+          <div class="btn-wrap mt-8">
+            <button id="clear-all-checkbox" class="btn btn-danger">リセット</button>
+            <button type="submit" class="btn">絞り込む</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="change-confirm-modal" class="modal">
+    <div>
+      <div class="modal-content">
+        <h2 class="page-title mx-auto">確認</h2>
+        <span class="modal-close"><span class="material-symbols-outlined">close</span></span>
+
+        <div class="mt-8">
+          <p>チェックを入れた書評(<span id="selectedCount">0</span>件)のステータスを「<span id="selectedStatusText"></span>」に変更してよろしいですか？</p>
+        </div>
+
+        <div class="mt-8">
+          <ol class="change-confirm-preview" id="selectedReviewList">
+            <li>[No.<span>0</span>] <span>-----</span>(書籍 : <span>-----</span>)</li>
+          </ol>
+        </div>
+
+        <div class="btn-wrap mt-8">
+          <button type="button" class="btn" data-modal-close>キャンセル</button>
+          <button type="button" class="btn" id="confirmStatusUpdateBtn">変更する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../static/js/admin/admin-general.js" th:src="@{/js/admin/admin-general.js}"></script>
+  <script src="../../static/js/admin/review-list.js" th:src="@{/js/admin/review-list.js}"></script>
+</body>
+</html>

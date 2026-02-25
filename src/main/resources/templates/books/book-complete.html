@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書評投稿完了</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+
+    <link rel="stylesheet" th:href="@{/css/books/book-complete.css}" href="../../static/css/books/book-complete.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="signup-header">
+        <h1>
+            投稿完了
+        </h1>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <div class="check-img-div">
+                <div class="check-outer">
+                    <div class="check-inner">
+                        <svg width="40" height="30" viewBox="0 0 52 40" fill="none">
+                            <path d="M5 22L20 35L47 5" stroke="white" stroke-width="6" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="complete-text">
+                <h2>登録完了しました</h2>
+                <div class="text-gap">
+                    <p class="intro-text">ご投稿いただきありがとうございます。</p>
+                    <p class="intro-text">一次審査の開始までしばらくお待ちください。</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="container">
+                    <h3>今後の書評の流れ</h3>
+                    <div class="underline"></div>
+                </div>
+                <!-- ステップフロー -->
+                <div class="timeline-container">
+                    <div class="timeline-step">
+                        <div class="step-marker">
+                            <div class="circle-complete green">1</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3>一次審査</h3>
+                            <p>投稿された書評の一次審査が行われます。</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-marker">
+                            <div class="circle-complete gray">2</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3>二次審査</h3>
+                            <p>一次審査を通過した書評の二次審査が行われます。</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-marker">
+                            <div class="circle-complete gray">3</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3>ノミネート発表</h3>
+                            <p>二次審査を通過した10冊の書評が書店にて発売されます。</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-marker">
+                            <div class="circle-complete gray">4</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3>大賞発表</h3>
+                            <p>店舗で発売された10冊のうち、最も人気だった本が<strong>文庫X</strong>として発売されます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="countdown-container">
+                <div class="label-text">一次審査開始まで</div>
+                <div class="timer-display">
+                    <div class="time-group">
+                        <span id="days" class="number" th:text="${duration.toDays()}">--</span>
+                        <span class="unit">日</span>
+                    </div>
+                    <div class="time-group">
+                        <span id="hours" class="number" th:text="${duration.toHoursPart() % 24}">--</span>
+                        <span class="unit">時間</span>
+                    </div>
+                    <div class="time-group">
+                        <span id="minutes" class="number" th:text="${duration.toMillisPart() % 60}">--</span>
+                        <span class="unit">分</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a th:href="@{/mypage}" href="mypage.html" class="btn btn-next-step" id="btn-next-step">
+                    マイページへ
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

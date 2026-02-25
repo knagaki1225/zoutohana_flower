@@ -1,0 +1,151 @@
+<!-- 【企画作成確認】 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企画編集 - 確認</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+</head>
+<body>
+    <div th:replace="~{layout-admin :: header}"></div>
+
+    <main id="admin-main">
+      <h1 class="page-title">
+        <span class="material-symbols-outlined scale-bigger text-gray mr-2">docs</span>
+        企画編集 - 確認
+      </h1>
+
+      <div class="main-content-card mt-4">
+        <form>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>公開/非公開 : </th>
+                <td>
+                  公開
+                  <input type="radio" name="published" value="TRUE" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th class="table-border-b-strong">ステータス : </th>
+                <td class="table-border-b-strong">
+                  書評投稿期間前
+                  <option name="status" value="BEFORE_SUBMISSION" class="hidden">書評投稿期間前</option>
+                </td>
+              </tr>
+
+              <tr>
+                <th>企画名 : </th>
+                <td>
+                  冬に読みたい！わたしのおすすめ文庫
+                  <input type="text" name="name" value="冬に読みたい！わたしのおすすめ文庫" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <span class="icon-center gap-1">
+                    企画URL<span class="material-symbols-outlined text-gray cursor-help" title="企画ページのURLの末尾につく文字列です。">help</span> : </th>
+                  </span>
+                <td>
+                  <p>winter-bunko</p>
+                  <span class="text-gray">https://zoutohana-fansite.com/project/</span><span class="text-gray">winter-bunko</span>
+                  <input type="text" name="urlKey" id="urlKey-input" value="winter-bunko" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th class="table-border-b-light">説明 : </th>
+                <td class="table-border-b-light">
+                  <p>冬の足音が近づく中、「冬に読みたい文庫本」をテーマに、皆さまからの書評を募集します。寒い日につい手に取りたくなる心温まる物語、静かな時間に寄り添う一冊――あなたのおすすめをぜひ教えてください。</p>
+                  <textarea rows="10" name="introduction" class="hidden">
+                    冬の足音が近づく中、「冬に読みたい文庫本」をテーマに、皆さまからの書評を募集します。寒い日につい手に取りたくなる心温まる物語、静かな時間に寄り添う一冊――あなたのおすすめをぜひ教えてください。
+                  </textarea>
+                </td>
+              </tr>
+
+              <tr>
+                <th>企画期間 : </th>
+                <td>
+                  2025/10/27 12:00<span class="wave-dash">～</span>2025/11/09 12:00
+                  <input type="datetime-local" name="projectStartAt" value="" class="hidden">
+                  <input type="datetime-local" name="projectEndAt" value="" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th>書評作成・投稿期間 : </th>
+                <td>
+                  2025/10/27 12:00<span class="wave-dash">～</span>2025/11/09 12:00
+                  <input type="datetime-local" name="submissionStartAt" value="" class="hidden">
+                  <input type="datetime-local" name="submissionEndAt" value="" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th class="table-border-b-light">書評投票(二次審査)期間 : </th>
+                <td class="table-border-b-light">
+                  2025/10/27 12:00<span class="wave-dash">～</span>2025/11/09 12:00
+                  <input type="datetime-local" name="votingStartAt" value="" class="hidden">
+                  <input type="datetime-local" name="votingEndAt" value="" class="hidden">
+                </td>
+              </tr>
+
+              <tr>
+                <th>書籍タイトル : </th>
+                <td>
+                  表示しない
+                  <input type="radio" name="enableVisibleBookTitle" value="FALSE" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th>書評タイトル : </th>
+                <td>
+                  表示する
+                  <input type="radio" name="enableVisibleReviewTitle" value="TRUE" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th class="table-border-b-light">投稿者情報 : </th>
+                <td class="table-border-b-light">
+                  表示する
+                  <input type="radio" name="enableVisibleUserInfo" value="TRUE" class="hidden">
+                </td>
+              </tr>
+
+              <tr>
+                <th>テーマカラー : </th>
+                <td>
+                  <span class="color-dot" style="background:var(--project-yellow);" title="YELLOW : き"></span>
+                  <input type="radio" name="themeColor" value="YELLOW" class="hidden">
+                </td>
+              </tr>
+              <tr>
+                <th>ロゴ画像 : </th>
+                <td id="projectInput-td">
+                  <div>
+                    <img id="mainImg-preview">
+                    <input type="file" accept="image/*" name="mainImg" id="mainImg-input" class="hidden">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>PDF : </th>
+                <td id="projectInput-td">
+                  <div>
+                    <ul id="pdf-list-ul"></ul>
+                    <input type="file" accept="application/pdf" name="pdf" multiple id="pdf-input" class="hidden">
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <div class="btn-wrap mt-4">
+              <a href="#" th:href="@{/}" class="btn">前に戻る</a>
+              <input type="submit" value="更新する" class="btn">
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

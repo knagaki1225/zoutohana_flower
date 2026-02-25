@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人お知らせ</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/info/post-list.css}" href="../../static/css/info/post-list.css">
+</head>
+
+<body>
+
+    <div th:replace="~{layout :: header}"></div>
+
+    <div class="container">
+        <div class="breadcrumb-box">
+            <div class="breadcrumb"><a th:href="@{/}" href="../fansite/top.html">ホーム</a></div>
+            <div class="breadcrumb-middle">></div>
+            <div class="breadcrumb" id="breadcrumb-here">個人お知らせ</div>
+        </div>
+        <div class="list-box">
+            <div class="list-title">
+                <h2>News</h2>
+                <div class="list-border"></div>
+            </div>
+            <p>個人お知らせ</p>
+        </div>
+        <section class="news-box">
+            <div th:if="${notifications != null}">
+                <div class="news-list" id="news-list" th:each="n : ${notifications}">
+                    <a th:href="@{/mypage/notification/{id}(id=${n.getId()})}" href="" class="news-item">
+                        <div class="news-body">
+                            <div class="news-meta">
+                                <span class="news-date"
+                                    th:text="${#temporals.format(n.sendAt, 'yyyy.MM.dd')}">2025/11/30</span>
+                            </div>
+                            <div class="news-block">
+                                <p th:text="${n.title}" class="news-title">11月30日 寄贈情報のお知らせ</p>
+                                <span class="news-arrow">></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="news-list" th:if="${notifications == null}">
+                通知がありません
+            </div>
+        </section>
+
+    </div>
+
+    <!-- フッター -->
+    <div th:replace="~{layout :: footer}"></div>
+    <script th:src="@{/js/hamburger.js}"></script>
+</body>
+
+</html>

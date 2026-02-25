@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}" href="../../static/css/header.css">
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../static/css/footer.css">
+    <link rel="stylesheet" th:href="@{/css/form-container.css}" href="../../static/css/form-container.css">
+
+    <link rel="stylesheet" th:href="@{/css/info/post-list.css}" href="../../static/css/info/post-list.css">
+</head>
+
+<body>
+    <div th:replace="~{layout :: header}"></div>
+    <div class="container">
+        <div class="breadcrumb-box">
+            <div class="breadcrumb"><a th:href="@{/}" href="../fansite/top.html">ホーム</a></div>
+            <div class="breadcrumb-middle">></div>
+            <div class="breadcrumb" id="breadcrumb-here">お知らせ</div>
+        </div>
+        <div class="list-box">
+            <div class="list-title">
+                <h2>News</h2>
+                <div class="list-border"></div>
+            </div>
+            <p th:text="${category}">新着情報</p>
+        </div>
+        <section class="news-box">
+            <div>
+                <form th:action="@{/news/search}" method="get" action="#" class="search_container">
+                    <svg class="search_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" placeholder="キーワードで検索" name="s" th:value="${param.s != null ? param.s : ''}">
+                </form>
+            </div>
+            <div id="PostTop">
+                <div class="tab-box">
+                    <ul class="tab-menu">
+                        <a th:href="@{/news(category='new')}" href="">
+                            <li class="tab-item" th:classappend="${#strings.equals(param.category, 'new')} ? 'active'">
+                                新着情報</li>
+                        </a>
+                        <a th:href="@{/news(category='project')}" href="">
+                            <li class="tab-item"
+                                th:classappend="${#strings.equals(param.category, 'project')} ? 'active'">企画情報</li>
+                        </a>
+                        <a th:href="@{/news(category='donation')}" href="">
+                            <li class="tab-item"
+                                th:classappend="${#strings.equals(param.category, 'donation')} ? 'active'">寄贈情報</li>
+                        </a>
+                        <a th:href="@{/news(category='else')}" href="">
+                            <li class="tab-item" th:classappend="${#strings.equals(param.category, 'else')} ? 'active'">
+                                その他情報</li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+            <div th:if="${postPagination != null}">
+                <div class="news-list" id="news-list" th:each="post : ${postPagination.posts}">
+                    <a th:href="@{/news/{id}(id=${post.getId()})}" href="" class="news-item">
+                        <div class="news-body">
+                            <div class="news-meta">
+                                <span class="news-date"
+                                    th:text="${#temporals.format(post.postedAt, 'yyyy.MM.dd')}">2025/11/30</span>
+                                <span class="news-tag" th:text="${'#' + post.getCategory.label}">#寄贈情報</span>
+                            </div>
+                            <div class="news-block">
+                                <p th:text="${post.title}" class="news-title">11月30日 寄贈情報のお知らせ</p>
+                                <span class="news-arrow">></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="news-list" th:if="${postPagination.posts.size() == 0}">
+                投稿がありません
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <div th:replace="~{layout :: footer}"></div>
+
+    <script th:src="@{/js/hamburger.js}"></script>
+
+</body>
+
+</html>

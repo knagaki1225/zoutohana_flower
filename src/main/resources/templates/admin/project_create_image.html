@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像アップロード</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="../../static/css/admin/admin-style.css" th:href="@{/css/admin/admin-style.css}">
+    <style>
+        /* 画像プレビュー用の簡易スタイル調整 */
+        .image-preview-area {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        #image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            display: none; /* 初期状態は非表示 */
+            border: 2px solid var(--border-color, #ddd);
+        }
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{layout-admin :: header}"></div>
+
+<main id="admin-main">
+    <h1 class="page-title">
+        <span class="material-symbols-outlined scale-bigger text-gray mr-2">upload_file</span>
+        画像アップロード
+    </h1>
+
+    <div class="main-content-card mt-4">
+        <form th:action="@{/admin/project/create/image}" th:object="${form}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}">
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>
+              <span class="icon-center gap-1">
+                画像ファイル<span class="material-symbols-outlined text-gray cursor-help" title="JPEG, PNG, WebP形式に対応しています。">help</span> :
+              </span>
+                        </th>
+                        <td>
+                            <div class="file-input-wrapper">
+                                <input th:field="*{image}" type="file" name="imageFile" id="image-input" accept="image/*" class="btn-file">
+                            </div>
+
+                            <div class="image-preview-area">
+                                <p class="text-gray mb-1" id="preview-label" style="display:none;">プレビュー:</p>
+                                <img id="image-preview" alt="アップロード画像プレビュー">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="btn-wrap mt-4">
+                    <button type="submit" class="btn btn-primary">アップロードする</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.getElementById('image-input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('image-preview');
+        const label = document.getElementById('preview-label');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                label.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+            label.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

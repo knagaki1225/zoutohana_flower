@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エラー</title>
+    <link rel="icon" th:href="@{/img/zoutohana-jitsubutsu.png}">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../static/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/auth/404.css}" href="../../static/css/auth/404.css">
+</head>
+
+<body>
+<div class="container">
+    <div th:replace="~{layout :: header}"></div>
+    <main>
+        <div class="form-container">
+            <div class="check-img-div">
+                <div class="check-outer">
+                    <div class="check-inner">
+                        <svg width="40" height="30" viewBox="0 0 52 40" fill="none">
+                            <path d="M26 5V25M26 35V35.1" stroke="white" stroke-width="6" stroke-linecap="round"
+                                  stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <!-- テキスト -->
+            <h2 class="complete-title">EXCEPTION</h2>
+
+            <div class="complete-line"></div>
+
+            <p class="complete-text">
+                エラーが発生しました。
+            </p>
+
+            <a sec:authorize="hasRole('USER')" th:href="@{/}" class="complete-btn">
+                マイページへ
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dash}" class="complete-btn">
+                管理者トップへ
+            </a>
+            <a sec:authorize="isAnonymous()" th:href="@{/}" class="complete-btn">
+                トップページへ
+            </a>
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/hamburger.js}"></script>
+</body>
+
+</html>

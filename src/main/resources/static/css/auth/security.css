@@ -1,0 +1,317 @@
+body {
+  margin: 0;
+}
+
+/*  ヘッダー*/
+.signup-header {
+  color: var(--text-white-color);
+  text-align: center;
+}
+
+.signup-header h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 3rem;
+}
+
+/* フォームコンテナ */
+.form-container {
+  background-color: var(--back-color);
+  padding: 2rem 15px;
+}
+
+/* 背景白 */
+.info-box {
+  max-width: 550px;
+  margin: 30px auto; /* 画面中央 */
+  padding: 15px 20px; /* 画面が広い時の余白 */
+  background-color: white;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border: 1.5px #f4f4f4 solid;
+}
+
+.detail-item {
+  width: 100%;
+}
+
+/* 登録完了のヘッダー */
+.detail-item label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--font-normal);
+}
+
+/* check img */
+.check-img-div {
+  display: flex;
+  justify-content: center;
+}
+
+.check-img {
+  width: 100px;
+  height: auto;
+}
+
+/* 登録完了しました全体 */
+.complete-text {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--font-normal);
+  font-weight: bold;
+}
+
+/* テキスト */
+.intro-text {
+  /* ▼ positionやwidthを削除し、中央揃えに ▼ */
+  font-size: 1rem;
+  /* 画像に合わせて調整 */
+  color: var(--font-normal);
+  text-align: center;
+  margin: 0;
+  margin-bottom: 3px;
+  font-weight: 400;
+}
+
+/* 今後の書評の流れの下のアンダーライン */
+.container {
+  text-align: center;
+}
+
+h3 {
+  color: var(--font-bold);
+  margin-bottom: 10px;
+}
+
+/* 下線 */
+.underline {
+  width: 35%;
+  height: 3px;
+  background-color: var(--main-color);
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+/* check img */
+.check-img-div {
+  display: flex;
+  justify-content: center;
+}
+
+.check-img {
+  width: 100px;
+  height: auto;
+}
+
+/* チェックマークの外枠 */
+.check-outer {
+  width: 110px;
+  height: 110px;
+  background-color: #e3e3e3;
+  /* 薄い緑 */
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-inner {
+  width: 90px;
+  height: 90px;
+  background-color: var(--main-color);
+  /* 濃い緑 */
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+/* 本文 */
+.step-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: --var(font-normal);
+  line-height: 1.6;
+}
+
+/* 強調文字（文庫Xの部分） */
+.step-content strong {
+  color: --var(font-normal);
+  font-weight: bold;
+}
+
+.key-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.key-box a {
+  align-items: center;
+}
+
+.key-img {
+  padding-top: 1.5vh;
+  width: 2rem;
+  height: 2rem;
+}
+
+/* セキュリティコード */
+.security-img {
+  width: 20px;
+}
+
+.security-code {
+  display: flex;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  border: 1px #e8e8e8 solid;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.security-code-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.space {
+  padding: 0px 10px;
+}
+
+.copy-box {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-left: 1rem;
+}
+
+.copy-box p {
+  font-size: 1.2rem;
+  color: var(--main-color);
+}
+
+.red-text {
+  color: red;
+}
+
+.text-gap {
+  margin-bottom: 5vh;
+}
+
+/* securityコードの下の線 */
+.border-security {
+  border-bottom: 1px solid var(--font-normal);
+}
+
+/* 全体 */
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* 1行分 */
+.alert-item {
+  display: flex;
+  align-items: center; /* ← 縦中央揃え */
+  gap: 12px;
+  padding: 8px 0;
+}
+
+/* ! アイコン */
+.alert-icon {
+  width: 2.2rem;
+  flex-shrink: 0;
+}
+
+/* テキスト */
+.alert-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.btn-next-step {
+  background-color: var(--main-color);
+  color: var(--text-white-color);
+  font-size: 1.1rem;
+}
+
+/* === 検索ボタン === */
+.btn {
+  display: flex;
+  justify-content: center;
+  /* テキストを水平方向の中央に配置 */
+  align-items: center;
+  /* テキストを垂直方向の中央に配置 */
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1.5px solid var(--main-color);
+}
+
+/* フッター */
+footer {
+  background-color: var(--back-color);
+  padding: 20px 0;
+  text-align: center;
+  margin-top: 2rem;
+  color: #777777;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+@media (min-width: 550px) {
+  .form-container {
+    padding: 3rem;
+  }
+
+  .info-box {
+    padding: 30px 50px; /* 画面が広い時の余白 */
+  }
+
+  .btn {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+/* 最初は透明にしておく */
+.copy-check-mark.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* コピー成功時にこのクラスをJSでつける */
+.copy-check-mark {
+    color: #28a745; /* 緑色 */
+    font-weight: bold;
+    transition: opacity 0.3s ease; /* ふわっと出す設定 */
+    position: absolute; /* アイコンの上に重ねる場合 */
+    right: -20px;       /* 位置はデザインに合わせて調整してください */
+}
